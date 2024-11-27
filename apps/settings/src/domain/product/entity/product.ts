@@ -1,8 +1,7 @@
-import { AggregateEntity } from 'apps/@shared/entity/aggregate-entity';
+import { AggregateEntity } from '../../../../../@shared/entity/aggregate-entity';
+import { validateSyncData } from '../../../../../@shared/validation/validate-sync-data';
 import { Barcode } from '../object-value/barcode';
-import { validateOrReject, validateSync } from 'class-validator';
 import { ProductValidator } from './product.validation';
-import { validateSyncData } from 'apps/@shared/validation/validate-sync-data';
 
 export interface ProductProps {
   id: string;
@@ -37,7 +36,14 @@ export abstract class Product extends AggregateEntity {
   }
 
   isValid(): boolean {
-    validateSyncData(new ProductValidator(this.toJSON()));
+    const errors = validateSyncData(
+      new ProductValidator(this.toJSON()),
+      this.type,
+    );
+
+    if (errors.length) {
+      throw errors;
+    }
 
     return true;
   }
