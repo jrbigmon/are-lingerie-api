@@ -23,7 +23,6 @@ export class Lingerie extends Product {
   constructor(props: LingerieProps) {
     super({ ...props, type: Lingerie.name });
     this.size = props.size;
-    super.isValid();
     this.isValid();
   }
 
@@ -39,6 +38,8 @@ export class Lingerie extends Product {
   }
 
   isValid(): boolean {
+    super.isValid();
+
     const errors = validateSyncData(
       new LingerieValidator(this.toJSON()),
       Lingerie.name,
