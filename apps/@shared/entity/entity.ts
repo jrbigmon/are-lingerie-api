@@ -1,4 +1,4 @@
-export abstract class AggregateEntity {
+export abstract class Entity {
   constructor(protected readonly id: string) {}
 
   abstract isValid(): boolean;

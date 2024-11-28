@@ -1,4 +1,4 @@
-import { AggregateEntity } from '../../../../../@shared/entity/aggregate-entity';
+import { Entity } from '../../../../../@shared/entity/entity';
 import { validateSyncData } from '../../../../../@shared/validation/validate-sync-data';
 import { Barcode } from '../object-value/barcode';
 import { ProductValidator } from './product.validation';
@@ -11,7 +11,7 @@ export interface ProductProps {
   type: string;
 }
 
-export abstract class Product extends AggregateEntity {
+export abstract class Product extends Entity {
   protected name: string;
   protected description: string;
   protected barcode: Barcode;
