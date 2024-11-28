@@ -1,5 +1,5 @@
 import { generateUUID } from '../../../../../@shared/util/generateUUID';
-import { Lingerie, LingerieProps, LingerieSize } from '../entity/lingerie';
+import { Lingerie, LingerieProps } from '../entity/lingerie/lingerie';
 
 export function createProductFactory() {
   return {

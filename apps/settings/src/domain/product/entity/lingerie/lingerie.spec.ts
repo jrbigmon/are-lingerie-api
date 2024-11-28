@@ -1,4 +1,4 @@
-import { InvalidAttribute } from '../../../../../@shared/error/invalid-attribute';
+import { InvalidAttribute } from '../../../../../../@shared/error/invalid-attribute';
 import { Lingerie, LingerieSize } from './lingerie';
 
 describe('Lingerie entity', () => {

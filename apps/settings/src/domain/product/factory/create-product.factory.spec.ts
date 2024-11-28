@@ -1,4 +1,4 @@
-import { Lingerie, LingerieSize } from '../entity/lingerie';
+import { Lingerie, LingerieSize } from '../entity/lingerie/lingerie';
 import { createProductFactory } from './create-product.factory';
 
 describe('createProductFactory', () => {

@@ -1,6 +1,6 @@
-import { validateSyncData } from '../../../../../@shared/validation/validate-sync-data';
+import { validateSyncData } from '../../../../../../@shared/validation/validate-sync-data';
 import { LingerieValidator } from './lingerie.validation';
-import { Product } from './product';
+import { Product } from '../product';
 
 export enum LingerieSize {
   SMALL = 'small',
