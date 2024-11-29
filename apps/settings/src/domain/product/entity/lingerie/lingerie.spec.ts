@@ -1,4 +1,5 @@
 import { InvalidAttribute } from '../../../../../../@shared/error/invalid-attribute';
+import { Barcode } from '../../object-value/barcode';
 import { Lingerie, LingerieSize } from './lingerie';
 
 describe('Lingerie entity', () => {
@@ -7,7 +8,7 @@ describe('Lingerie entity', () => {
       id: '123',
       name: 'Lingerie 1',
       description: 'Description 1',
-      barcode: '1234567890',
+      barcode: new Barcode('1234567890'),
       size: LingerieSize.SMALL,
     });
 
@@ -16,7 +17,7 @@ describe('Lingerie entity', () => {
     expect(lingerieJSON.id).toEqual('123');
     expect(lingerieJSON.name).toEqual('Lingerie 1');
     expect(lingerieJSON.description).toEqual('Description 1');
-    expect(lingerieJSON.barcode).toEqual('1234567890');
+    expect(lingerieJSON.barcode.getCode()).toEqual('1234567890');
     expect(lingerieJSON.size).toEqual(LingerieSize.SMALL);
   });
 
@@ -27,7 +28,7 @@ describe('Lingerie entity', () => {
         id: '123',
         name: 'Lingerie 1',
         description: 'Description 1',
-        barcode: '1234567890',
+        barcode: new Barcode('1234567890'),
         size: null,
       });
     } catch (error) {

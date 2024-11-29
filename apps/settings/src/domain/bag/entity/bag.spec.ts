@@ -1,5 +1,6 @@
 import { InvalidAttribute } from '../../../../../@shared/error/invalid-attribute';
 import { Lingerie, LingerieSize } from '../../product/entity/lingerie/lingerie';
+import { Barcode } from '../../product/object-value/barcode';
 import { DateRange } from '../object-value/date-range';
 import { Bag, BagProps } from './bag';
 
@@ -20,7 +21,7 @@ describe('Bag entity', () => {
       id: '456',
       name: 'Lingerie 1',
       description: 'Description 1',
-      barcode: '1234567890',
+      barcode: new Barcode('1234567890'),
       size: LingerieSize.SMALL,
     });
 

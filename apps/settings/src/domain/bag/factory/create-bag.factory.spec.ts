@@ -1,4 +1,5 @@
 import { Lingerie, LingerieSize } from '../../product/entity/lingerie/lingerie';
+import { Barcode } from '../../product/object-value/barcode';
 import {
   CreateBagEmptyInput,
   createBagFactory,
@@ -14,7 +15,7 @@ describe('createBagFactory', () => {
         id: '1',
         name: 'Product 1',
         description: 'Description 1',
-        barcode: '1234567890',
+        barcode: new Barcode('1234567890'),
         size: LingerieSize.SMALL,
       }),
     ];
@@ -40,7 +41,7 @@ describe('createBagFactory', () => {
           id: '1',
           name: 'Product 1',
           description: 'Description 1',
-          barcode: '1234567890',
+          barcode: new Barcode('1234567890'),
           size: LingerieSize.SMALL,
         },
       ],

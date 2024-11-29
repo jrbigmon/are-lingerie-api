@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 import { ProductProps } from './product';
+import { Barcode } from '../object-value/barcode';
 
 export class ProductValidator {
   @IsNotEmpty({ message: 'Product id is required' })
@@ -12,7 +13,7 @@ export class ProductValidator {
   description: string;
 
   @IsNotEmpty({ message: 'Product barcode is required' })
-  barcode: string;
+  barcode: Barcode;
 
   @IsNotEmpty({ message: 'Product type is required' })
   type: string;

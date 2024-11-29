@@ -1,6 +1,7 @@
 import { validateSyncData } from '../../../../../../@shared/validation/validate-sync-data';
 import { LingerieValidator } from './lingerie.validation';
 import { Product } from '../product';
+import { Barcode } from '../../object-value/barcode';
 
 export enum LingerieSize {
   SMALL = 'small',
@@ -13,7 +14,7 @@ export interface LingerieProps {
   id: string;
   name: string;
   description: string;
-  barcode: string;
+  barcode: Barcode;
   size: LingerieSize;
 }
 
@@ -31,7 +32,7 @@ export class Lingerie extends Product {
       id: this.id,
       name: this.name,
       description: this.description,
-      barcode: this.barcode.getCode(),
+      barcode: this.barcode,
       type: this.type,
       size: this.size,
     };

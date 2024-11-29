@@ -1,4 +1,5 @@
 import { Lingerie, LingerieSize } from '../entity/lingerie/lingerie';
+import { Barcode } from '../object-value/barcode';
 import { createProductFactory } from './create-product.factory';
 
 describe('createProductFactory', () => {
@@ -16,8 +17,9 @@ describe('createProductFactory', () => {
 
     expect(productCreated).toBeInstanceOf(Lingerie);
     expect(productCreated.toJSON()).toMatchObject({
-      id: expect.any(String),
       ...input,
+      id: expect.any(String),
+      barcode: new Barcode('1234567890'),
     });
   });
 });

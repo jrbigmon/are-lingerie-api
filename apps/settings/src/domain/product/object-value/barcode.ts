@@ -1,5 +1,15 @@
-export class Barcode {
-  constructor(private code: string) {
+import { IsNotEmpty, MinLength } from 'class-validator';
+import { ObjectValue } from '../../../../../@shared/object-value/object-value';
+import { validateSyncData } from '../../../../../@shared/validation/validate-sync-data';
+
+export class Barcode extends ObjectValue {
+  @IsNotEmpty({ message: 'Product code is required' })
+  @MinLength(6, { message: 'Code must be at least 6 characters' })
+  private code: string;
+
+  constructor(code: string) {
+    super();
+    this.code = code;
     this.isValid();
   }
 
@@ -11,13 +21,13 @@ export class Barcode {
     this.code = code;
   }
 
-  isValid() {
-    if (!this.code?.trim()) {
-      throw new Error('Barcode is required');
+  isValid(): boolean {
+    const errors = validateSyncData(this, Barcode.name);
+
+    if (errors.length) {
+      throw errors;
     }
 
-    if (this.code.length < 6) {
-      throw new Error('Barcode must be at least 6 characters');
-    }
+    return true;
   }
 }

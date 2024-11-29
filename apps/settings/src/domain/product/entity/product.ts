@@ -7,7 +7,7 @@ export interface ProductProps {
   id: string;
   name: string;
   description: string;
-  barcode: string;
+  barcode: Barcode;
   type: string;
 }
 
@@ -21,7 +21,7 @@ export abstract class Product extends Entity {
     super(id);
     this.name = name;
     this.description = description;
-    this.barcode = new Barcode(barcode);
+    this.barcode = barcode;
     this.type = type;
   }
 
@@ -34,7 +34,7 @@ export abstract class Product extends Entity {
       id: this.id,
       name: this.name,
       description: this.description,
-      barcode: this.barcode.getCode(),
+      barcode: this.barcode,
       type: this.type,
     };
   }
