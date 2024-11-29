@@ -1,12 +1,13 @@
 import { Entity } from '../../../../../@shared/entity/entity';
+import { validateSyncData } from '../../../../../@shared/validation/validate-sync-data';
 import { Product } from '../../product/entity/product';
 import { DateRange } from '../object-value/date-range';
+import { BagValidation } from './bag.validation';
 
 export interface BagProps {
   id: string;
   description: string;
-  dateOfReceipt: Date;
-  deliveryDate: Date;
+  dateRange: DateRange;
 }
 
 export class Bag extends Entity {
@@ -14,10 +15,11 @@ export class Bag extends Entity {
   private dateRange: DateRange;
   private products: Map<string, Product> = new Map();
 
-  constructor({ id, description, dateOfReceipt, deliveryDate }: BagProps) {
+  constructor({ id, description, dateRange }: BagProps) {
     super(id);
     this.description = description;
-    this.dateRange = new DateRange({ dateOfReceipt, deliveryDate });
+    this.dateRange = dateRange;
+    this.isValid();
   }
 
   addProduct(product: Product) {
@@ -32,8 +34,7 @@ export class Bag extends Entity {
     return {
       id: this.id,
       description: this.description,
-      dateOfReceipt: this.dateRange.getDateOfReceipt(),
-      deliveryDate: this.dateRange.getDeliveryDate(),
+      dateRange: this.dateRange,
       products: Array.from(this.products.values()).map((product) =>
         product.toJSON(),
       ),
@@ -41,6 +42,12 @@ export class Bag extends Entity {
   }
 
   isValid(): boolean {
-    throw new Error('Method not implemented.');
+    const errors = validateSyncData(new BagValidation(this.toJSON()), Bag.name);
+
+    if (errors.length) {
+      throw errors;
+    }
+
+    return true;
   }
 }

@@ -3,6 +3,6 @@ export class InvalidAttribute {
     public property: string,
     public value: string,
     public className: string,
-    public message: string,
+    public message: string[],
   ) {}
 }
