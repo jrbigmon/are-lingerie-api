@@ -12,28 +12,35 @@ export interface CreateProductInput {
 
 export type CreateListProductInput = CreateProductInput[];
 
-export function createProductService(input: CreateProductInput) {
+export function createProductService() {
   const { createGeneric, createLingerie } = createProductFactory();
 
-  const { name, description, barcode, type, size } = input;
+  function createOne(input: CreateProductInput) {
+    const { name, description, barcode, type, size } = input;
 
-  let newProduct: Generic | Lingerie = null;
+    let newProduct: Generic | Lingerie = null;
 
-  switch (type) {
-    case Lingerie.name: {
-      newProduct = createLingerie({ name, description, barcode, size });
-      break;
+    switch (type) {
+      case Lingerie.name: {
+        newProduct = createLingerie({ name, description, barcode, size });
+        break;
+      }
+
+      default: {
+        newProduct = createGeneric({ name, description, barcode });
+        break;
+      }
     }
 
-    default: {
-      newProduct = createGeneric({ name, description, barcode });
-      break;
-    }
+    return newProduct;
   }
 
-  return newProduct;
-}
+  function createList(props: CreateListProductInput) {
+    return props.map((product) => createOne(product));
+  }
 
-export function createListProductService(props: CreateListProductInput) {
-  return props.map((product) => createProductService(product));
+  return {
+    createOne,
+    createList,
+  };
 }

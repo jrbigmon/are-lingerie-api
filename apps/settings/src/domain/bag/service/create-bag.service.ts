@@ -1,5 +1,5 @@
 import { LingerieSize } from '../../product/entity/lingerie/lingerie';
-import { createListProductService } from '../../product/service/create-product.service';
+import { createProductService } from '../../product/service/create-product.service';
 import { Bag } from '../entity/bag';
 import { createBagFactory } from '../factory/create-bag.factory';
 
@@ -19,25 +19,33 @@ export interface CreateBagLoadedInput extends CreateBagEmptyInput {
   }[];
 }
 
-const { createLoadedBag, createEmptyBag } = createBagFactory();
+export function createBagService() {
+  const { createLoadedBag, createEmptyBag } = createBagFactory();
+  const { createList } = createProductService();
 
-export function createLoadedBagService(input: CreateBagLoadedInput): Bag {
-  const bag = createLoadedBag({
-    description: input?.description,
-    deliveryDate: new Date(input?.deliveryDate),
-    dateOfReceipt: new Date(input?.dateOfReceipt),
-    products: createListProductService(input?.products),
-  });
+  function createLoaded(input: CreateBagLoadedInput): Bag {
+    const bag = createLoadedBag({
+      description: input?.description,
+      deliveryDate: new Date(input?.deliveryDate),
+      dateOfReceipt: new Date(input?.dateOfReceipt),
+      products: createList(input?.products),
+    });
 
-  return bag;
-}
+    return bag;
+  }
 
-export function createEmptyBagService(input: CreateBagEmptyInput): Bag {
-  const bag = createEmptyBag({
-    description: input?.description,
-    deliveryDate: new Date(input?.deliveryDate),
-    dateOfReceipt: new Date(input?.dateOfReceipt),
-  });
+  function createEmpty(input: CreateBagEmptyInput): Bag {
+    const bag = createEmptyBag({
+      description: input?.description,
+      deliveryDate: new Date(input?.deliveryDate),
+      dateOfReceipt: new Date(input?.dateOfReceipt),
+    });
 
-  return bag;
+    return bag;
+  }
+
+  return {
+    createLoaded,
+    createEmpty,
+  };
 }

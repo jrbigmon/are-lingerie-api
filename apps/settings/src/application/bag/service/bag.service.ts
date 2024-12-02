@@ -1,7 +1,4 @@
-import {
-  createEmptyBagService,
-  createLoadedBagService,
-} from '../../../domain/bag/service/create-bag.service';
+import { createBagService } from '../../../domain/bag/service/create-bag.service';
 import {
   CreateEmptyBagInput,
   CreateEmptyBagOutput,
@@ -19,7 +16,9 @@ export class BagService implements BagServiceInterface {
   public async createEmptyBag(
     input: CreateEmptyBagInput,
   ): Promise<CreateEmptyBagOutput> {
-    const bag = createEmptyBagService(input);
+    const { createEmpty } = createBagService();
+
+    const bag = createEmpty(input);
 
     await this.repository.save(bag);
 
@@ -36,7 +35,9 @@ export class BagService implements BagServiceInterface {
   public async createLoadedBag(
     input: CreateLoadBagInput,
   ): Promise<CreateLoadBagOutput> {
-    const bag = createLoadedBagService(input);
+    const { createLoaded } = createBagService();
+
+    const bag = createLoaded(input);
 
     await this.repository.save(bag);
 
