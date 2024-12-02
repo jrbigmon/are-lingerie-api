@@ -6,7 +6,7 @@ export interface CreateProductInput {
   name: string;
   description: string;
   barcode: string;
-  type: string;
+  type?: string;
   size?: LingerieSize;
 }
 

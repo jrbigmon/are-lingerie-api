@@ -14,7 +14,7 @@ export interface CreateBagLoadedInput extends CreateBagEmptyInput {
     name: string;
     description: string;
     barcode: string;
-    type: string;
+    type?: string;
     size?: LingerieSize;
   }[];
 }
