@@ -1,4 +1,8 @@
 import { createBagFactory } from '../../../domain/bag/factory/create-bag.factory';
+import {
+  createEmptyBagService,
+  createLoadedBagService,
+} from '../../../domain/bag/service/create-bag.service';
 import { createProductFactory } from '../../../domain/product/factory/create-product.factory';
 import { createListProductService } from '../../../domain/product/service/create-product.service';
 import {
@@ -18,13 +22,7 @@ export class BagService implements BagServiceInterface {
   public async createEmptyBag(
     input: CreateEmptyBagInput,
   ): Promise<CreateEmptyBagOutput> {
-    const { createEmptyBag } = createBagFactory();
-
-    const bag = createEmptyBag({
-      description: input?.description,
-      deliveryDate: new Date(input?.deliveryDate),
-      dateOfReceipt: new Date(input?.dateOfReceipt),
-    });
+    const bag = createEmptyBagService(input);
 
     await this.repository.save(bag);
 
@@ -41,14 +39,7 @@ export class BagService implements BagServiceInterface {
   public async createLoadedBag(
     input: CreateLoadBagInput,
   ): Promise<CreateLoadBagOutput> {
-    const { createLoadedBag } = createBagFactory();
-
-    const bag = createLoadedBag({
-      description: input?.description,
-      deliveryDate: new Date(input?.deliveryDate),
-      dateOfReceipt: new Date(input?.dateOfReceipt),
-      products: createListProductService(input?.products),
-    });
+    const bag = createLoadedBagService(input);
 
     await this.repository.save(bag);
 

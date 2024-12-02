@@ -12,10 +12,10 @@ export interface CreateProductInput {
 
 export type CreateListProductInput = CreateProductInput[];
 
-export function createProductService(props: CreateProductInput) {
+export function createProductService(input: CreateProductInput) {
   const { createGeneric, createLingerie } = createProductFactory();
 
-  const { name, description, barcode, type, size } = props;
+  const { name, description, barcode, type, size } = input;
 
   let newProduct: Generic | Lingerie = null;
 
