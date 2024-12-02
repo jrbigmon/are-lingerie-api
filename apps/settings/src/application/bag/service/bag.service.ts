@@ -1,10 +1,7 @@
-import { createBagFactory } from '../../../domain/bag/factory/create-bag.factory';
 import {
   createEmptyBagService,
   createLoadedBagService,
 } from '../../../domain/bag/service/create-bag.service';
-import { createProductFactory } from '../../../domain/product/factory/create-product.factory';
-import { createListProductService } from '../../../domain/product/service/create-product.service';
 import {
   CreateEmptyBagInput,
   CreateEmptyBagOutput,
