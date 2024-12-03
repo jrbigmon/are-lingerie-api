@@ -5,7 +5,7 @@ import { DateRange } from '../object-value/date-range';
 import { Bag, BagProps } from './bag';
 
 describe('Bag entity', () => {
-  it('should be create a bag empty', () => {
+  it('should be create a bag empty and add lingerie', () => {
     const bagProperties: BagProps = {
       id: '123',
       description: 'Bag 1',
