@@ -1,4 +1,5 @@
 import { Entity } from '../../../../../@shared/entity/entity';
+import { ProductAlreadyRegistered } from '../../../../../@shared/error/product-already-registered';
 import { validateSyncData } from '../../../../../@shared/validation/validate-sync-data';
 import { Product } from '../../product/entity/product';
 import { DateRange } from '../object-value/date-range';
@@ -23,6 +24,14 @@ export class Bag extends Entity {
   }
 
   addProduct(product: Product) {
+    const alreadyExist = Array.from(this.products.values()).some(
+      (p) => p.getBarcode().getCode() === product.getBarcode().getCode(),
+    );
+
+    if (alreadyExist) {
+      throw new ProductAlreadyRegistered(product.getBarcode().getCode());
+    }
+
     this.products.set(product.getId(), product);
   }
 

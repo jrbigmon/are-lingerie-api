@@ -29,6 +29,10 @@ export abstract class Product extends Entity {
     return this.id;
   }
 
+  public getBarcode(): Barcode {
+    return this.barcode;
+  }
+
   toJSON() {
     return {
       id: this.id,
