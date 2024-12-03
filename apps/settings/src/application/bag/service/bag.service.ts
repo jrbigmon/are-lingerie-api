@@ -1,3 +1,4 @@
+import { Inject, Injectable } from '@nestjs/common';
 import { createBagService } from '../../../domain/bag/service/create-bag.service';
 import {
   CreateEmptyBagInput,
@@ -10,8 +11,12 @@ import {
 import { BagRepositoryInterface } from '../repository/bag.repository.interface';
 import { BagServiceInterface } from './bag.service.interface';
 
+@Injectable()
 export class BagService implements BagServiceInterface {
-  constructor(private readonly repository: BagRepositoryInterface) {}
+  constructor(
+    @Inject('BagRepository')
+    private readonly repository: BagRepositoryInterface,
+  ) {}
 
   public async createEmptyBag(
     input: CreateEmptyBagInput,
