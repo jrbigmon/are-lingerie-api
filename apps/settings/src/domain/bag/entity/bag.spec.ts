@@ -53,9 +53,13 @@ describe('Bag entity', () => {
     } finally {
       expect(errors).toBeDefined();
       expect(errors).toMatchObject([
-        new InvalidAttribute('description', '', 'Bag', [
-          'Bag description is required',
-        ]),
+        {
+          className: 'Bag',
+          message: ['Bag description is required'],
+          property: 'description',
+          timestamp: expect.any(Date),
+          value: '',
+        },
       ]);
     }
   });
@@ -76,9 +80,13 @@ describe('Bag entity', () => {
     } finally {
       expect(errors).toBeDefined();
       expect(errors).toMatchObject([
-        new InvalidAttribute('dateRange', null, 'Bag', [
-          'Bag date range is required',
-        ]),
+        {
+          className: 'Bag',
+          message: ['Bag date range is required'],
+          timestamp: expect.any(Date),
+          property: 'dateRange',
+          value: null,
+        },
       ]);
     }
   });
