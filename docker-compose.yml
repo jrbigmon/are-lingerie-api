@@ -1,0 +1,51 @@
+version: '3.9'
+services:
+  settings:
+    build:
+      context: .
+      dockerfile: ./apps/settings/dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - DATABASE_URL=postgresql://settings_user:password@settings_db:5432/settings_db
+    depends_on:
+      - settings_db
+
+  # order:
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile.order
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - DATABASE_URL=postgresql://order_user:password@order_db:5432/order_db
+  #   depends_on:
+  #     - order_db
+
+  settings_db:
+    image: postgres:15
+    container_name: settings_db
+    environment:
+      POSTGRES_USER: settings_user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: settings_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - settings_db_data:/var/lib/postgresql/data
+
+  # order_db:
+  #   image: postgres:15
+  #   container_name: order_db
+  #   environment:
+  #     POSTGRES_USER: order_user
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: order_db
+  #   ports:
+  #     - "5434:5432"
+  #   volumes:
+  #     - order_db_data:/var/lib/postgresql/data
+
+volumes:
+  settings_db_data:
+  # order_db_data:
