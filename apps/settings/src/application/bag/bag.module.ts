@@ -5,6 +5,7 @@ import { BagRepository } from './repository/bag.repository';
 import { DataSource } from 'typeorm';
 import { BagModel } from './model/bag.model';
 import { DATABASE_PROVIDE_NAME_PG } from '../../../utils/constants';
+import { BagControllerV1 } from './controller/bag.controller';
 
 const services: Provider[] = [
   BagService,
@@ -22,7 +23,7 @@ const services: Provider[] = [
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [],
+  controllers: [BagControllerV1],
   providers: services,
   exports: services,
 })

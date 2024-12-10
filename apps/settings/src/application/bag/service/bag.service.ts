@@ -10,6 +10,7 @@ import {
 } from '../dto/create-load-bag.dto';
 import { BagRepositoryInterface } from '../repository/bag.repository.interface';
 import { BagServiceInterface } from './bag.service.interface';
+import { ListBagInput, ListBagOutput } from '../dto/list-bag.dto';
 
 @Injectable()
 export class BagService implements BagServiceInterface {
@@ -54,5 +55,22 @@ export class BagService implements BagServiceInterface {
       dateOfReceipt: dateRange.getDateOfReceipt(),
       deliveryDate: dateRange.getDeliveryDate(),
     };
+  }
+
+  public async list(input: ListBagInput = {}): Promise<ListBagOutput> {
+    const bags = await this.repository.findAll();
+
+    const output = bags.map((bagClass) => {
+      const bag = bagClass.toJSON();
+
+      return {
+        id: bag.id,
+        description: bag.description,
+        dateOfReceipt: bag.dateRange.getDateOfReceipt(),
+        deliveryDate: bag.dateRange.getDeliveryDate(),
+      };
+    });
+
+    return output;
   }
 }
