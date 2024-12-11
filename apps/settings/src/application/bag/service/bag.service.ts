@@ -11,6 +11,7 @@ import {
 import { BagRepositoryInterface } from '../repository/bag.repository.interface';
 import { BagServiceInterface } from './bag.service.interface';
 import { ListBagInput, ListBagOutput } from '../dto/list-bag.dto';
+import { GetBagOutput } from '../dto/get-bag.dto';
 
 @Injectable()
 export class BagService implements BagServiceInterface {
@@ -72,5 +73,20 @@ export class BagService implements BagServiceInterface {
     });
 
     return output;
+  }
+
+  public async get(id: string): Promise<GetBagOutput | null> {
+    const bag = await this.repository.findById(id);
+
+    if (!bag) return null;
+
+    const { dateRange, description } = bag.toJSON();
+
+    return {
+      id,
+      description,
+      dateOfReceipt: dateRange.getDateOfReceipt(),
+      deliveryDate: dateRange.getDeliveryDate(),
+    };
   }
 }
