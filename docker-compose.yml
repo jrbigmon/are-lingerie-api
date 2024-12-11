@@ -34,6 +34,8 @@ services:
       context: .
       dockerfile: ./apps/settings/dockerfile
     container_name: settings_service
+    ports:
+      - ${SETTINGS_PORT}:${SETTINGS_PORT}
     environment:
       SETTINGS_DATABASE_URL: ${SETTINGS_DATABASE_URL}
       SETTINGS_DB_USER: ${SETTINGS_DB_USER}
@@ -51,6 +53,8 @@ services:
       context: .
       dockerfile: ./apps/orders/dockerfile
     container_name: orders_service
+    ports:
+      - ${ORDER_PORT}:${ORDER_PORT}
     environment:
       ORDER_DATABASE_URL: ${ORDER_DATABASE_URL}
       ORDER_DB_USER: ${ORDER_DB_USER}
