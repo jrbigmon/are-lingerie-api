@@ -12,7 +12,7 @@ const services: Provider[] = [
   BagRepository,
   {
     provide: 'BagRepository',
-    useValue: BagRepository,
+    useClass: BagRepository,
   },
   {
     provide: 'BAG_MODEL',
