@@ -1,4 +1,5 @@
 version: '3.9'
+
 services:
   settings:
     build:
@@ -6,45 +7,73 @@ services:
       dockerfile: ./apps/settings/dockerfile
     ports:
       - "3001:3001"
+    env_file:
+      - .env
     environment:
-      - DATABASE_URL=postgresql://settings_user:password@settings_db:5432/settings_db
+      - DATABASE_URL=${SETTINGS_DATABASE_URL}
     depends_on:
       - settings_db
+    networks:
+      - local-network
 
   # order:
   #   build:
   #     context: .
-  #     dockerfile: ./Dockerfile.order
+  #     dockerfile: ./apps/orders/dockerfile
   #   ports:
   #     - "3000:3000"
+  #   env_file:
+  #     - .env
   #   environment:
-  #     - DATABASE_URL=postgresql://order_user:password@order_db:5432/order_db
+  #     - DATABASE_URL=${ORDER_DATABASE_URL}
   #   depends_on:
-  #     - order_db
+  #     order_db: 
+  #       condition: service_healthy
+  #   networks:
+  #     - local-network
 
   settings_db:
-    image: postgres:15
-    container_name: settings_db
+    image: postgres:15.3-alpine
+    container_name: settings-postgres
+    restart: always
+    env_file:
+      - .env
     environment:
-      POSTGRES_USER: settings_user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: settings_db
+      POSTGRES_USER: ${SETTINGS_DB_USER}
+      POSTGRES_PASSWORD: ${SETTINGS_DB_PASSWORD}
+      POSTGRES_DB: ${SETTINGS_DB_NAME}
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - settings_db_data:/var/lib/postgresql/data
+    networks:
+      - local-network
 
   # order_db:
-  #   image: postgres:15
-  #   container_name: order_db
+  #   image: postgres:15.3-alpine
+  #   container_name: order-postgres
+  #   restart: always
+  #   env_file:
+  #     - .env
   #   environment:
-  #     POSTGRES_USER: order_user
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: order_db
+  #     POSTGRES_USER: ${ORDER_DB_USER}
+  #     POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
+  #     POSTGRES_DB: ${ORDER_DB_NAME}
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U ${ORDER_DB_USER}"]
+  #     interval: 5s
+  #     timeout: 10s
+  #     retries: 5
   #   ports:
   #     - "5434:5432"
   #   volumes:
   #     - order_db_data:/var/lib/postgresql/data
+  #   networks:
+  #     - local-network
+
+networks:
+  local-network:
+    driver: bridge
 
 volumes:
   settings_db_data:
