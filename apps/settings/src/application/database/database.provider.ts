@@ -34,7 +34,7 @@ export const databaseProviders = [
         database: dbConfig.database,
         entities,
         synchronize: process.env.NODE_ENV === 'test',
-        logging: process.env.NODE_ENV !== 'production', // Log em ambientes não-produtivos
+        logging: process.env.NODE_ENV !== 'production',
       });
 
       return dataSource.initialize();
