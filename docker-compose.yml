@@ -1,80 +1,72 @@
-version: '3.9'
+version: '3.8'
 
 services:
-  settings:
-    build:
-      context: .
-      dockerfile: ./apps/settings/dockerfile
-    ports:
-      - "3001:3001"
-    env_file:
-      - .env
-    environment:
-      - DATABASE_URL=${SETTINGS_DATABASE_URL}
-    depends_on:
-      - settings_db
-    networks:
-      - local-network
-
-  # order:
-  #   build:
-  #     context: .
-  #     dockerfile: ./apps/orders/dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     - DATABASE_URL=${ORDER_DATABASE_URL}
-  #   depends_on:
-  #     order_db: 
-  #       condition: service_healthy
-  #   networks:
-  #     - local-network
-
   settings_db:
-    image: postgres:15.3-alpine
-    container_name: settings-postgres
-    restart: always
-    env_file:
-      - .env
+    image: postgres:15
+    container_name: settings_db
     environment:
       POSTGRES_USER: ${SETTINGS_DB_USER}
       POSTGRES_PASSWORD: ${SETTINGS_DB_PASSWORD}
       POSTGRES_DB: ${SETTINGS_DB_NAME}
     ports:
-      - "5432:5432"
+      - "${SETTINGS_DB_PORT}:${SETTINGS_DB_PORT}"
     volumes:
       - settings_db_data:/var/lib/postgresql/data
     networks:
-      - local-network
+      - app_network
 
-  # order_db:
-  #   image: postgres:15.3-alpine
-  #   container_name: order-postgres
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     POSTGRES_USER: ${ORDER_DB_USER}
-  #     POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
-  #     POSTGRES_DB: ${ORDER_DB_NAME}
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U ${ORDER_DB_USER}"]
-  #     interval: 5s
-  #     timeout: 10s
-  #     retries: 5
-  #   ports:
-  #     - "5434:5432"
-  #   volumes:
-  #     - order_db_data:/var/lib/postgresql/data
-  #   networks:
-  #     - local-network
+  orders_db:
+    image: postgres:15
+    container_name: orders_db
+    environment:
+      POSTGRES_USER: ${ORDER_DB_USER}
+      POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
+      POSTGRES_DB: ${ORDER_DB_NAME}
+    ports:
+      - "5433:${ORDER_DB_PORT}"
+    volumes:
+      - orders_db_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+
+  settings_service:
+    build:
+      context: .
+      dockerfile: ./apps/settings/dockerfile
+    container_name: settings_service
+    environment:
+      SETTINGS_DATABASE_URL: ${SETTINGS_DATABASE_URL}
+      SETTINGS_DB_USER: ${SETTINGS_DB_USER}
+      SETTINGS_DB_PASSWORD: ${SETTINGS_DB_PASSWORD}
+      SETTINGS_DB_NAME: ${SETTINGS_DB_NAME}
+      SETTINGS_DB_PORT: ${SETTINGS_DB_PORT}
+      SETTINGS_DB_EMAIL: ${SETTINGS_DB_EMAIL}
+    depends_on:
+      - settings_db
+    networks:
+      - app_network
+
+  orders_service:
+    build:
+      context: .
+      dockerfile: ./apps/orders/dockerfile
+    container_name: orders_service
+    environment:
+      ORDER_DATABASE_URL: ${ORDER_DATABASE_URL}
+      ORDER_DB_USER: ${ORDER_DB_USER}
+      ORDER_DB_PASSWORD: ${ORDER_DB_PASSWORD}
+      ORDER_DB_NAME: ${ORDER_DB_NAME}
+      ORDER_DB_PORT: ${ORDER_DB_PORT}
+      ORDERS_DB_EMAIL: ${ORDERS_DB_EMAIL}
+    depends_on:
+      - orders_db
+    networks:
+      - app_network
 
 networks:
-  local-network:
+  app_network:
     driver: bridge
 
 volumes:
   settings_db_data:
-  # order_db_data:
+  orders_db_data:
