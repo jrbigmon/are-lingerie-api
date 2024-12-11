@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Bag } from '../../../domain/bag/entity/bag';
 import { BagRepositoryInterface } from './bag.repository.interface';
-import { Model } from 'mongoose';
 import { Repository } from 'typeorm';
 import { BagModel } from '../model/bag.model';
 import { DateRange } from '../../../domain/bag/object-value/date-range';
