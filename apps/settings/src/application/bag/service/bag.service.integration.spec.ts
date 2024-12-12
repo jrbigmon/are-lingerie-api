@@ -152,5 +152,9 @@ describe('BagService integration tests', () => {
         deliveryDate: new Date('2022-01-15'),
       });
     });
+
+    it('should not return a bag when is not found', () => {
+      return expect(bagService.get('123')).resolves.toBeNull();
+    });
   });
 });
