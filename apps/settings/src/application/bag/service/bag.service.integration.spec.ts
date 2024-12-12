@@ -4,9 +4,14 @@ import { BagService } from './bag.service';
 import { CreateEmptyBagInput } from '../dto/create-empty-bag.dto';
 import { CreateLoadBagInput } from '../dto/create-load-bag.dto';
 import { LingerieSize } from '../../../domain/product/entity/lingerie/lingerie';
+import { BagRepositoryInterface } from '../repository/bag.repository.interface';
+import { BagRepository } from '../repository/bag.repository';
+import { Bag } from '../../../domain/bag/entity/bag';
+import { DateRange } from '../../../domain/bag/object-value/date-range';
 
 describe('BagService integration tests', () => {
   let bagService: BagService;
+  let repository: BagRepositoryInterface;
 
   beforeEach(async () => {
     const fixture = await Test.createTestingModule({
@@ -14,6 +19,7 @@ describe('BagService integration tests', () => {
     }).compile();
 
     bagService = fixture.get<BagService>(BagService);
+    repository = fixture.get<BagRepositoryInterface>(BagRepository);
 
     await fixture.init();
   });
@@ -95,6 +101,56 @@ describe('BagService integration tests', () => {
       };
 
       await expect(bagService.createLoadedBag(input)).rejects.toBeDefined();
+    });
+  });
+
+  describe('list', () => {
+    it('should list all bags', async () => {
+      await repository.save(
+        new Bag({
+          id: '123',
+          description: 'Bag 1',
+          dateRange: new DateRange({
+            dateOfReceipt: new Date('2022-01-01'),
+            deliveryDate: new Date('2022-01-15'),
+          }),
+        }),
+      );
+
+      const output = await bagService.list();
+
+      expect(output).toMatchObject([
+        {
+          id: '123',
+          description: 'Bag 1',
+          dateOfReceipt: new Date('2022-01-01'),
+          deliveryDate: new Date('2022-01-15'),
+        },
+      ]);
+    });
+  });
+
+  describe('get', () => {
+    it('should get a bag by id', async () => {
+      const bag = new Bag({
+        id: '123',
+        description: 'Bag 1',
+        dateRange: new DateRange({
+          dateOfReceipt: new Date('2022-01-01'),
+          deliveryDate: new Date('2022-01-15'),
+        }),
+      });
+
+      await repository.save(bag);
+
+      const output = await bagService.get('123');
+
+      expect(output).toMatchObject({
+        id: '123',
+        description: 'Bag 1',
+        dateOfReceipt: new Date('2022-01-01'),
+        deliveryDate: new Date('2022-01-15'),
+      });
     });
   });
 });
