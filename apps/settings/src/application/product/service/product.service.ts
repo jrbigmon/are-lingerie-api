@@ -78,8 +78,23 @@ export class ProductService implements ProductServiceInterface {
     await this.repository.delete(product);
   }
 
-  list(input: ListProductInput): Promise<ListProductOutput> {
-    throw new Error('Method not implemented.');
+  async list(input: ListProductInput): Promise<ListProductOutput> {
+    const products = await this.repository.findAll();
+
+    const output = products.map((productModel) => {
+      const product = productModel.toJSON();
+
+      return {
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        barcode: product.barcode.getCode(),
+        type: product.type,
+        size: product.size,
+      };
+    });
+
+    return output;
   }
 
   get(id: string): Promise<GetProductOutput | null> {

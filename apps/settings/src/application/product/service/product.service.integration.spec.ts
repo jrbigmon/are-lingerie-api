@@ -101,4 +101,31 @@ describe('ProductService integration tests', () => {
       await expect(repository.findById(productCreated.id)).resolves.toBeNull();
     });
   });
+
+  describe('list', () => {
+    it('should list all products', async () => {
+      const input: CreateProductInput = {
+        name: 'Product 1',
+        description: 'Description 1',
+        barcode: '1234567890',
+        type: undefined,
+        size: undefined,
+      };
+
+      await productService.create(input);
+
+      const output = await productService.list({});
+
+      expect(output).toMatchObject([
+        {
+          id: expect.any(String),
+          name: 'Product 1',
+          description: 'Description 1',
+          barcode: '1234567890',
+          type: 'Generic',
+          size: null,
+        },
+      ]);
+    });
+  });
 });
