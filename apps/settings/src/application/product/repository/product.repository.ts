@@ -1,4 +1,4 @@
-import { Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Product } from '../../../domain/product/entity/product';
 import { ProductModel } from '../model/product.model';
 import { ProductRepositoryInterface } from './product.repository.interface';
@@ -10,6 +10,7 @@ import {
 import { Generic } from '../../../domain/product/entity/generic/generic';
 import { Repository } from 'typeorm';
 
+@Injectable()
 export class ProductRepository implements ProductRepositoryInterface {
   constructor(
     @Inject('PRODUCT_MODEL')
