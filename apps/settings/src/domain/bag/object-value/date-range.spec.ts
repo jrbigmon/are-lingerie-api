@@ -32,12 +32,13 @@ describe('DateRange', () => {
     } finally {
       expect(errors).toBeDefined();
       expect(errors).toMatchObject([
-        new InvalidAttribute(
-          'dateOfReceipt',
-          '2022-01-15T00:00:00.000Z',
-          DateRange.name,
-          ['Date of receipt cannot be after delivery date'],
-        ),
+        {
+          className: 'DateRange',
+          message: ['Date of receipt cannot be after delivery date'],
+          property: 'dateOfReceipt',
+          timestamp: expect.any(Date),
+          value: '2022-01-15T00:00:00.000Z',
+        },
       ]);
     }
   });
