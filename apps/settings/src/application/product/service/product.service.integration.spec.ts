@@ -128,4 +128,29 @@ describe('ProductService integration tests', () => {
       ]);
     });
   });
+
+  describe('get', () => {
+    it('should get a product by id', async () => {
+      const input: CreateProductInput = {
+        name: 'Product 1',
+        description: 'Description 1',
+        barcode: '1234567890',
+        type: undefined,
+        size: undefined,
+      };
+
+      const productCreated = await productService.create(input);
+
+      const output = await productService.get(productCreated.id);
+
+      expect(output).toMatchObject({
+        id: productCreated.id,
+        name: 'Product 1',
+        description: 'Description 1',
+        barcode: '1234567890',
+        type: 'Generic',
+        size: null,
+      });
+    });
+  });
 });

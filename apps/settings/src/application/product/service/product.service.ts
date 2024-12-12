@@ -97,7 +97,22 @@ export class ProductService implements ProductServiceInterface {
     return output;
   }
 
-  get(id: string): Promise<GetProductOutput | null> {
-    throw new Error('Method not implemented.');
+  async get(id: string): Promise<GetProductOutput | null> {
+    if (!id) return null;
+
+    const product = await this.repository.findById(id);
+
+    if (!product) return null;
+
+    const { name, description, barcode, size, type } = product.toJSON();
+
+    return {
+      id,
+      name,
+      description,
+      barcode: barcode.getCode(),
+      type,
+      size,
+    };
   }
 }
