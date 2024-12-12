@@ -25,7 +25,9 @@ export class Bag extends Entity {
 
   addProduct(product: Product) {
     const alreadyExist = Array.from(this.products.values()).some(
-      (p) => p.getBarcode().getCode() === product.getBarcode().getCode(),
+      (p) =>
+        p.getBarcode().getCode() === product.getBarcode().getCode() &&
+        p.getId() !== product.getId(),
     );
 
     if (alreadyExist) {

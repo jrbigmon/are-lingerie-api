@@ -92,10 +92,16 @@ export class BagService implements BagServiceInterface {
   }
 
   public async addProduct(bagId: string, product: Product): Promise<boolean> {
-    if (!bagId || !product) return;
+    if (!bagId || !product) return false;
 
     const bag = await this.repository.findById(bagId, { includeBag: true });
 
-    if (!bag) return null;
+    if (!bag) return false;
+
+    bag.addProduct(product);
+
+    await this.repository.save(bag);
+
+    return true;
   }
 }
