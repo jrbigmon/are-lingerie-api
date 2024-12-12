@@ -2,8 +2,9 @@ import { DataSource } from 'typeorm';
 import { BagModel } from '../bag/model/bag.model';
 import { DATABASE_PROVIDE_NAME_PG } from '../../../utils/constants';
 import { parse } from 'url';
+import { ProductModel } from '../product/model/product.model';
 
-export const entities = [BagModel];
+export const entities = [BagModel, ProductModel];
 
 const parseDatabaseUrl = (dbUrl: string) => {
   const parsedUrl = parse(dbUrl, false);
