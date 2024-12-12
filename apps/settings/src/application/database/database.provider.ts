@@ -19,7 +19,7 @@ const parseDatabaseUrl = (dbUrl: string) => {
   };
 };
 
-export const databaseProviders = [
+const productionProvider = [
   {
     provide: DATABASE_PROVIDE_NAME_PG,
     useFactory: async () => {
@@ -41,3 +41,28 @@ export const databaseProviders = [
     },
   },
 ];
+
+const testProvider = [
+  {
+    provide: DATABASE_PROVIDE_NAME_PG,
+    useFactory: async () => {
+      const dataSource = new DataSource({
+        type: 'sqlite',
+        database: ':memory:',
+        entities,
+        synchronize: true,
+        logging: false,
+      });
+
+      return dataSource.initialize();
+    },
+  },
+];
+
+const getDatabaseProvider = () => {
+  if (process.env.NODE_ENV === 'test') return testProvider;
+
+  return productionProvider;
+};
+
+export const databaseProviders = getDatabaseProvider();
