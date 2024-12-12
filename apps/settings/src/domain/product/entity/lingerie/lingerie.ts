@@ -19,30 +19,17 @@ export interface LingerieProps {
 }
 
 export class Lingerie extends Product {
-  private size: LingerieSize;
-
   constructor(props: LingerieProps) {
     super({ ...props, type: Lingerie.name });
     this.size = props.size;
     this.isValid();
   }
 
-  toJSON() {
-    return {
-      id: this.id,
-      name: this.name,
-      description: this.description,
-      barcode: this.barcode,
-      type: this.type,
-      size: this.size,
-    };
-  }
-
   isValid(): boolean {
     super.isValid();
 
     const errors = validateSyncData(
-      new LingerieValidator(this.toJSON()),
+      new LingerieValidator({ size: this.size as LingerieSize }),
       Lingerie.name,
     );
 

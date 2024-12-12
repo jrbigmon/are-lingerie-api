@@ -9,6 +9,7 @@ export interface ProductProps {
   description: string;
   barcode: Barcode;
   type: string;
+  size?: string;
 }
 
 export abstract class Product extends Entity {
@@ -16,13 +17,15 @@ export abstract class Product extends Entity {
   protected description: string;
   protected barcode: Barcode;
   protected type: string;
+  protected size?: string;
 
-  constructor({ id, name, description, barcode, type }: ProductProps) {
+  constructor({ id, name, description, barcode, type, size }: ProductProps) {
     super(id);
     this.name = name;
     this.description = description;
     this.barcode = barcode;
     this.type = type;
+    this.size = size;
   }
 
   public getId(): string {
@@ -40,6 +43,7 @@ export abstract class Product extends Entity {
       description: this.description,
       barcode: this.barcode,
       type: this.type,
+      size: this.size,
     };
   }
 

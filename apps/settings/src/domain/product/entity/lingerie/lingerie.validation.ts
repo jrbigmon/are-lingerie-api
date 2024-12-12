@@ -5,7 +5,7 @@ export class LingerieValidator {
   @IsNotEmpty({ message: 'Product size is required' })
   size: LingerieSize;
 
-  constructor({ size }: LingerieProps) {
+  constructor({ size }: Pick<LingerieProps, 'size'>) {
     this.size = size;
   }
 }
