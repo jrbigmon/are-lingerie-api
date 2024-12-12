@@ -1,28 +1,14 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity } from 'typeorm';
+import { Model } from '../../../../../@shared/model/model';
 
 @Entity({ name: 'bag' })
-export class BagModel {
-  @PrimaryColumn({ nullable: false })
-  id: string;
-
-  @Column()
+export class BagModel extends Model {
+  @Column({ nullable: false })
   description: string;
 
-  @Column({ name: 'date_of_receipt' })
+  @Column({ name: 'date_of_receipt', nullable: false })
   dateOfReceipt: Date;
 
-  @Column({ name: 'delivery_date' })
+  @Column({ name: 'delivery_date', nullable: false })
   deliveryDate: Date;
-
-  @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
-
-  @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
 }
