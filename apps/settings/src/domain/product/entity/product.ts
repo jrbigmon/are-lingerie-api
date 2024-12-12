@@ -59,4 +59,24 @@ export abstract class Product extends Entity {
 
     return true;
   }
+
+  setName(name: string): void {
+    this.name = name;
+  }
+
+  setDescription(description: string): void {
+    this.description = description;
+  }
+
+  setBarcode(barcode: string): void {
+    this.barcode = new Barcode(barcode);
+  }
+
+  setType(type: string): void {
+    this.type = type;
+  }
+
+  setSize(size: string | null): void {
+    this.size = size;
+  }
 }

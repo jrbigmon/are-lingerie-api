@@ -4,6 +4,7 @@ import { ProductRepositoryInterface } from '../repository/product.repository.int
 import { ProductService } from './product.service';
 import { ProductRepository } from '../repository/product.repository';
 import { CreateProductInput } from '../dto/create-product.dto';
+import { UpdateProductInput } from '../dto/update-product.dto';
 
 describe('ProductService integration tests', () => {
   let productService: ProductService;
@@ -40,6 +41,42 @@ describe('ProductService integration tests', () => {
         id: expect.any(String),
         name: 'Product 1',
         description: 'Description 1',
+        barcode: '1234567890',
+        type: 'Generic',
+        size: null,
+      });
+    });
+  });
+
+  describe('update', () => {
+    it('should be update a generic product', async () => {
+      const input: CreateProductInput = {
+        name: 'Product 1',
+        description: 'Description 1',
+        barcode: '1234567890',
+        type: undefined,
+        size: undefined,
+      };
+
+      const productCreated = await productService.create(input);
+
+      const updatedInput: UpdateProductInput = {
+        name: 'Product 1 Updated',
+        description: 'Description 1 Updated',
+        barcode: '1234567890',
+        type: undefined,
+        size: undefined,
+      };
+
+      const updatedOutput = await productService.update(
+        productCreated.id,
+        updatedInput,
+      );
+
+      expect(updatedOutput).toMatchObject({
+        id: productCreated.id,
+        name: 'Product 1 Updated',
+        description: 'Description 1 Updated',
         barcode: '1234567890',
         type: 'Generic',
         size: null,
