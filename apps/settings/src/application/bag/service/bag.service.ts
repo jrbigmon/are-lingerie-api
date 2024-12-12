@@ -12,6 +12,7 @@ import { BagRepositoryInterface } from '../repository/bag.repository.interface';
 import { BagServiceInterface } from './bag.service.interface';
 import { ListBagInput, ListBagOutput } from '../dto/list-bag.dto';
 import { GetBagOutput } from '../dto/get-bag.dto';
+import { Product } from '../../../domain/product/entity/product';
 
 @Injectable()
 export class BagService implements BagServiceInterface {
@@ -88,5 +89,13 @@ export class BagService implements BagServiceInterface {
       dateOfReceipt: dateRange.getDateOfReceipt(),
       deliveryDate: dateRange.getDeliveryDate(),
     };
+  }
+
+  public async addProduct(bagId: string, product: Product): Promise<boolean> {
+    if (!bagId || !product) return;
+
+    const bag = await this.repository.findById(bagId, { includeBag: true });
+
+    if (!bag) return null;
   }
 }

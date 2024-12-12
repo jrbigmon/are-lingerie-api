@@ -2,13 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Product } from '../../../domain/product/entity/product';
 import { ProductModel } from '../model/product.model';
 import { ProductRepositoryInterface } from './product.repository.interface';
-import { Barcode } from '../../../domain/product/object-value/barcode';
-import {
-  Lingerie,
-  LingerieSize,
-} from '../../../domain/product/entity/lingerie/lingerie';
-import { Generic } from '../../../domain/product/entity/generic/generic';
 import { Repository } from 'typeorm';
+import { instantiateEntities } from '../../../../utils/instantiate-entites';
+
+const { initProduct } = instantiateEntities();
 
 @Injectable()
 export class ProductRepository implements ProductRepositoryInterface {
@@ -16,25 +13,6 @@ export class ProductRepository implements ProductRepositoryInterface {
     @Inject('PRODUCT_MODEL')
     private readonly productModel: Repository<ProductModel>,
   ) {}
-
-  private instantiateEntity(model: ProductModel): Product {
-    if (model.type === Lingerie.name) {
-      return new Lingerie({
-        id: model.id,
-        name: model.name,
-        description: model.description,
-        barcode: new Barcode(model.barcode),
-        size: model.size as LingerieSize,
-      });
-    }
-
-    return new Generic({
-      id: model.id,
-      name: model.name,
-      description: model.description,
-      barcode: new Barcode(model.barcode),
-    });
-  }
 
   async findById(id: string): Promise<Product | null> {
     if (!id) return null;
@@ -45,13 +23,13 @@ export class ProductRepository implements ProductRepositoryInterface {
 
     if (!productModel) return null;
 
-    return this.instantiateEntity(productModel);
+    return initProduct(productModel);
   }
 
   async findAll(): Promise<Array<Product>> {
     const productModels = await this.productModel.find({});
 
-    return productModels.map((model) => this.instantiateEntity(model));
+    return productModels.map((model) => initProduct(model));
   }
 
   async save(entity: Product): Promise<void> {

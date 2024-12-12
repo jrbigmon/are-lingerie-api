@@ -4,6 +4,11 @@ import { BagRepositoryInterface } from './bag.repository.interface';
 import { Repository } from 'typeorm';
 import { BagModel } from '../model/bag.model';
 import { DateRange } from '../../../domain/bag/object-value/date-range';
+import { Product } from '../../../domain/product/entity/product';
+import { Barcode } from '../../../domain/product/object-value/barcode';
+import { instantiateEntities } from '../../../../utils/instantiate-entites';
+
+const { initBag } = instantiateEntities();
 
 @Injectable()
 export class BagRepository implements BagRepositoryInterface {
@@ -12,33 +17,28 @@ export class BagRepository implements BagRepositoryInterface {
     private readonly bagModel: Repository<BagModel>,
   ) {}
 
-  private instantiateEntity(model: BagModel): Bag {
-    return new Bag({
-      id: model.id,
-      description: model.description,
-      dateRange: new DateRange({
-        dateOfReceipt: model.dateOfReceipt,
-        deliveryDate: model.deliveryDate,
-      }),
-    });
-  }
-
-  async findById(id: string): Promise<Bag | null> {
+  async findById(
+    id: string,
+    options: { includeBag: boolean },
+  ): Promise<Bag | null> {
     if (!id) return null;
 
-    const bagModel = await this.bagModel.findOneBy({
-      id,
+    const bagModel = await this.bagModel.findOne({
+      where: { id: id },
+      relations: {
+        products: true,
+      },
     });
 
     if (!bagModel) return null;
 
-    return this.instantiateEntity(bagModel);
+    return initBag(bagModel);
   }
 
   async findAll(): Promise<Array<Bag>> {
     const bagModels = await this.bagModel.find({});
 
-    return bagModels.map((model) => this.instantiateEntity(model));
+    return bagModels.map((model) => initBag(model));
   }
 
   async save(entity: Bag): Promise<void> {

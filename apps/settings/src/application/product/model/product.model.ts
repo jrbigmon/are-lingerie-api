@@ -1,5 +1,7 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { Model } from '../../../../../@shared/model/model';
+import { Bag } from '../../../domain/bag/entity/bag';
+import { BagModel } from '../../bag/model/bag.model';
 
 @Entity('product')
 export class ProductModel extends Model {
@@ -17,4 +19,7 @@ export class ProductModel extends Model {
 
   @Column({ nullable: true })
   size?: string;
+
+  @OneToMany(() => BagModel, (bag) => bag.products)
+  bag: BagModel;
 }

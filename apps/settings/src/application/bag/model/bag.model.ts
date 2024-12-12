@@ -1,5 +1,6 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { Model } from '../../../../../@shared/model/model';
+import { ProductModel } from '../../product/model/product.model';
 
 @Entity({ name: 'bag' })
 export class BagModel extends Model {
@@ -11,4 +12,7 @@ export class BagModel extends Model {
 
   @Column({ name: 'delivery_date', nullable: false })
   deliveryDate: Date;
+
+  @ManyToOne(() => ProductModel, (product) => product.bag)
+  products: ProductModel[];
 }
