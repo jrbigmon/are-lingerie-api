@@ -17,7 +17,7 @@ export abstract class Product extends Entity {
   protected description: string;
   protected barcode: Barcode;
   protected type: string;
-  protected size?: string;
+  protected size?: string | null;
 
   constructor({ id, name, description, barcode, type, size }: ProductProps) {
     super(id);
@@ -25,7 +25,7 @@ export abstract class Product extends Entity {
     this.description = description;
     this.barcode = barcode;
     this.type = type;
-    this.size = size;
+    this.size = size ?? null;
   }
 
   public getId(): string {

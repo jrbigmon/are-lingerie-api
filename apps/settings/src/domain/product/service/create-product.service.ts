@@ -7,7 +7,7 @@ export interface CreateProductInput {
   description: string;
   barcode: string;
   type?: string;
-  size?: LingerieSize;
+  size?: string;
 }
 
 export type CreateListProductInput = CreateProductInput[];
@@ -22,7 +22,12 @@ export function createProductService() {
 
     switch (type) {
       case Lingerie.name: {
-        newProduct = createLingerie({ name, description, barcode, size });
+        newProduct = createLingerie({
+          name,
+          description,
+          barcode,
+          size: size as LingerieSize,
+        });
         break;
       }
 

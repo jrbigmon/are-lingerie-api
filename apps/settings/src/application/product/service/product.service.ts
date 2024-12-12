@@ -12,6 +12,7 @@ import {
   UpdateProductInput,
   UpdateProductOutput,
 } from '../dto/update-product.dto';
+import { createProductService } from '../../../domain/product/service/create-product.service';
 
 @Injectable()
 export class ProductService implements ProductServiceInterface {
@@ -20,18 +21,37 @@ export class ProductService implements ProductServiceInterface {
     private readonly repository: ProductRepositoryInterface,
   ) {}
 
-  create(input: CreateProductInput): Promise<CreateProductOutput> {
-    throw new Error('Method not implemented.');
+  async create(input: CreateProductInput): Promise<CreateProductOutput> {
+    const { createOne } = createProductService();
+
+    const product = createOne(input);
+
+    await this.repository.save(product);
+
+    const { id, name, description, barcode, type, size } = product.toJSON();
+
+    return {
+      id,
+      name,
+      description,
+      barcode: barcode.getCode(),
+      type,
+      size,
+    };
   }
+
   update(id: string, input: UpdateProductInput): Promise<UpdateProductOutput> {
     throw new Error('Method not implemented.');
   }
+
   delete(id: string): Promise<DeleteProductOutput> {
     throw new Error('Method not implemented.');
   }
+
   list(input: ListProductInput): Promise<ListProductOutput> {
     throw new Error('Method not implemented.');
   }
+
   get(id: string): Promise<GetProductOutput | null> {
     throw new Error('Method not implemented.');
   }
