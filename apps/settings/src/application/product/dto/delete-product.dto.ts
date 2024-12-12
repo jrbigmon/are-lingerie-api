@@ -1,1 +1,1 @@
-export interface DeleteProductOutput {}
+export type DeleteProductOutput = void;

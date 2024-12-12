@@ -6,6 +6,7 @@ export interface ProductRepositoryInterface
   extends RepositoryInterface<Product> {
   findById(id: string): Promise<Product | null>;
   findAll(): Promise<Array<Product>>;
+  delete(product: Product): Promise<void>;
   // findByType(type: string): Promise<Array<Product>>;
   // findByTypeAndSize(type: string, size: LingerieSize): Promise<Array<Product>>;
   // findByTypeAndSizeAndBarcode(

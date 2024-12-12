@@ -83,4 +83,22 @@ describe('ProductService integration tests', () => {
       });
     });
   });
+
+  describe('delete', () => {
+    it('should delete a product', async () => {
+      const input: CreateProductInput = {
+        name: 'Product 1',
+        description: 'Description 1',
+        barcode: '1234567890',
+        type: undefined,
+        size: undefined,
+      };
+
+      const productCreated = await productService.create(input);
+
+      await productService.delete(productCreated.id);
+
+      await expect(repository.findById(productCreated.id)).resolves.toBeNull();
+    });
+  });
 });

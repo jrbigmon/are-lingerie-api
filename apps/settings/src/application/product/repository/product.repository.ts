@@ -66,4 +66,10 @@ export class ProductRepository implements ProductRepositoryInterface {
       size: size ?? null,
     } as ProductModel);
   }
+
+  async delete(product: Product): Promise<void> {
+    if (!product) return;
+
+    await this.productModel.softDelete({ id: product.getId() });
+  }
 }

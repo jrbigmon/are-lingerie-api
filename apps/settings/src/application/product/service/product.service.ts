@@ -15,6 +15,9 @@ import {
 import { createProductService } from '../../../domain/product/service/create-product.service';
 import { updateProductService } from '../../../domain/product/service/update-product.service';
 
+const { createOne } = createProductService();
+const { updateOne } = updateProductService();
+
 @Injectable()
 export class ProductService implements ProductServiceInterface {
   constructor(
@@ -23,8 +26,6 @@ export class ProductService implements ProductServiceInterface {
   ) {}
 
   async create(input: CreateProductInput): Promise<CreateProductOutput> {
-    const { createOne } = createProductService();
-
     const product = createOne(input);
 
     await this.repository.save(product);
@@ -47,8 +48,6 @@ export class ProductService implements ProductServiceInterface {
   ): Promise<UpdateProductOutput> {
     if (!id) return null;
 
-    const { updateOne } = updateProductService();
-
     const product = await this.repository.findById(id);
 
     updateOne(product, input);
@@ -67,8 +66,16 @@ export class ProductService implements ProductServiceInterface {
     };
   }
 
-  delete(id: string): Promise<DeleteProductOutput> {
-    throw new Error('Method not implemented.');
+  async delete(id: string): Promise<DeleteProductOutput> {
+    if (!id) return;
+
+    const product = await this.repository.findById(id);
+
+    if (!product) {
+      return;
+    }
+
+    await this.repository.delete(product);
   }
 
   list(input: ListProductInput): Promise<ListProductOutput> {
