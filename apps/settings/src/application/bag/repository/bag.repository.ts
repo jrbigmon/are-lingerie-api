@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Bag } from '../../../domain/bag/entity/bag';
-import { BagRepositoryInterface } from './bag.repository.interface';
+import {
+  BagRepositoryInterface,
+  FindByIdOptions,
+} from './bag.repository.interface';
 import { Repository } from 'typeorm';
 import { BagModel } from '../model/bag.model';
-import { DateRange } from '../../../domain/bag/object-value/date-range';
-import { Product } from '../../../domain/product/entity/product';
-import { Barcode } from '../../../domain/product/object-value/barcode';
 import { instantiateEntities } from '../../../../utils/instantiate-entites';
 
 const { initBag } = instantiateEntities();
@@ -19,14 +19,14 @@ export class BagRepository implements BagRepositoryInterface {
 
   async findById(
     id: string,
-    options: { includeBag: boolean },
+    { includeProducts = false }: FindByIdOptions,
   ): Promise<Bag | null> {
     if (!id) return null;
 
     const bagModel = await this.bagModel.findOne({
       where: { id: id },
       relations: {
-        products: true,
+        products: includeProducts,
       },
     });
 

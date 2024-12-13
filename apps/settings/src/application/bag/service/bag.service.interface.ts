@@ -1,3 +1,4 @@
+import { Product } from '../../../domain/product/entity/product';
 import {
   CreateEmptyBagInput,
   CreateEmptyBagOutput,
@@ -14,4 +15,5 @@ export interface BagServiceInterface {
   createLoadedBag(input: CreateLoadBagInput): Promise<CreateLoadBagOutput>;
   list(input: ListBagInput): Promise<ListBagOutput>;
   get(id: string): Promise<GetBagOutput | null>;
+  addProduct(id: string, product: Product): Promise<boolean>;
 }

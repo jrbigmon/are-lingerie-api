@@ -14,6 +14,7 @@ import {
 } from '../dto/update-product.dto';
 import { createProductService } from '../../../domain/product/service/create-product.service';
 import { updateProductService } from '../../../domain/product/service/update-product.service';
+import { BagServiceInterface } from '../../bag/service/bag.service.interface';
 
 const { createOne } = createProductService();
 const { updateOne } = updateProductService();
@@ -23,12 +24,14 @@ export class ProductService implements ProductServiceInterface {
   constructor(
     @Inject('ProductRepository')
     private readonly repository: ProductRepositoryInterface,
+    @Inject('BagService')
+    private readonly bagService: BagServiceInterface,
   ) {}
 
   async create(input: CreateProductInput): Promise<CreateProductOutput> {
     const product = createOne(input);
 
-    await this.repository.save(product);
+    await this.bagService.addProduct(input.bagId, product);
 
     const { id, name, description, barcode, type, size } = product.toJSON();
 

@@ -91,10 +91,10 @@ export class BagService implements BagServiceInterface {
     };
   }
 
-  public async addProduct(bagId: string, product: Product): Promise<boolean> {
-    if (!bagId || !product) return false;
+  public async addProduct(id: string, product: Product): Promise<boolean> {
+    if (!id || !product) return false;
 
-    const bag = await this.repository.findById(bagId, { includeBag: true });
+    const bag = await this.repository.findById(id, { includeProducts: true });
 
     if (!bag) return false;
 

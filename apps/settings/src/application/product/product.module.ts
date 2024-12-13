@@ -5,6 +5,8 @@ import { DataSource } from 'typeorm';
 import { ProductModel } from './model/product.model';
 import { DatabaseModule } from '../database/database.module';
 import { ProductService } from './service/product.service';
+import { BagModule } from '../bag/bag.module';
+import { BagService } from '../bag/service/bag.service';
 
 const services: Provider[] = [
   ProductService,
@@ -19,10 +21,14 @@ const services: Provider[] = [
       dataSource.getRepository(ProductModel),
     inject: [DATABASE_PROVIDE_NAME_PG],
   },
+  {
+    provide: 'BagService',
+    useClass: BagService,
+  },
 ];
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, BagModule],
   controllers: [],
   providers: services,
   exports: services,
