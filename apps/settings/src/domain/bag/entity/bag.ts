@@ -61,4 +61,8 @@ export class Bag extends Entity {
 
     return true;
   }
+
+  getId(): string {
+    return this.id;
+  }
 }

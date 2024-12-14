@@ -1,3 +1,4 @@
+import { Bag } from '../../../bag/entity/bag';
 import { Barcode } from '../../object-value/barcode';
 import { Product } from '../product';
 
@@ -6,6 +7,7 @@ export interface GenericProps {
   name: string;
   description: string;
   barcode: Barcode;
+  bag?: Bag;
 }
 
 export class Generic extends Product {

@@ -2,9 +2,13 @@ import { RepositoryInterface } from '../../../../../@shared/repository/repositor
 // import { LingerieSize } from '../../../domain/product/entity/lingerie/lingerie';
 import { Product } from '../../../domain/product/entity/product';
 
+export interface FindByIdOptions {
+  includeBag: boolean;
+}
+
 export interface ProductRepositoryInterface
   extends RepositoryInterface<Product> {
-  findById(id: string): Promise<Product | null>;
+  findById(id: string, options?: FindByIdOptions): Promise<Product | null>;
   findAll(): Promise<Array<Product>>;
   delete(product: Product): Promise<void>;
   // findByType(type: string): Promise<Array<Product>>;

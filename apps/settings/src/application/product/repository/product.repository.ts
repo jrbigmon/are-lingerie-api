@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Product } from '../../../domain/product/entity/product';
 import { ProductModel } from '../model/product.model';
-import { ProductRepositoryInterface } from './product.repository.interface';
+import {
+  FindByIdOptions,
+  ProductRepositoryInterface,
+} from './product.repository.interface';
 import { Repository } from 'typeorm';
 import { instantiateEntities } from '../../../../utils/instantiate-entites';
 
@@ -14,11 +17,17 @@ export class ProductRepository implements ProductRepositoryInterface {
     private readonly productModel: Repository<ProductModel>,
   ) {}
 
-  async findById(id: string): Promise<Product | null> {
+  async findById(
+    id: string,
+    { includeBag = false }: FindByIdOptions,
+  ): Promise<Product | null> {
     if (!id) return null;
 
-    const productModel = await this.productModel.findOneBy({
-      id,
+    const productModel = await this.productModel.findOne({
+      where: { id },
+      relations: {
+        bag: includeBag,
+      },
     });
 
     if (!productModel) return null;

@@ -7,6 +7,7 @@ import {
 import { Repository } from 'typeorm';
 import { BagModel } from '../model/bag.model';
 import { instantiateEntities } from '../../../../utils/instantiate-entites';
+import { ProductModel } from '../../product/model/product.model';
 
 const { initBag } = instantiateEntities();
 
@@ -42,13 +43,25 @@ export class BagRepository implements BagRepositoryInterface {
   }
 
   async save(entity: Bag): Promise<void> {
-    const { id, description, dateRange } = entity.toJSON();
+    const { id, description, dateRange, products } = entity.toJSON();
 
     await this.bagModel.save({
       id,
       description,
       dateOfReceipt: dateRange.getDateOfReceipt(),
       deliveryDate: dateRange.getDeliveryDate(),
-    } as BagModel);
+      products: products?.map((product) => {
+        const productModel = new ProductModel();
+
+        productModel.id = product.id;
+        productModel.name = product.name;
+        productModel.description = product.description;
+        productModel.barcode = product.barcode.getCode();
+        productModel.type = product.type;
+        productModel.size = product.size;
+
+        return productModel;
+      }),
+    });
   }
 }

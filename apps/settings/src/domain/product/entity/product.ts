@@ -1,5 +1,6 @@
 import { Entity } from '../../../../../@shared/entity/entity';
 import { validateSyncData } from '../../../../../@shared/validation/validate-sync-data';
+import { Bag } from '../../bag/entity/bag';
 import { Barcode } from '../object-value/barcode';
 import { ProductValidator } from './product.validation';
 
@@ -10,6 +11,7 @@ export interface ProductProps {
   barcode: Barcode;
   type: string;
   size?: string;
+  bag?: Bag;
 }
 
 export abstract class Product extends Entity {
@@ -18,14 +20,24 @@ export abstract class Product extends Entity {
   protected barcode: Barcode;
   protected type: string;
   protected size?: string | null;
+  protected bag: Bag;
 
-  constructor({ id, name, description, barcode, type, size }: ProductProps) {
+  constructor({
+    id,
+    name,
+    description,
+    barcode,
+    type,
+    size,
+    bag,
+  }: ProductProps) {
     super(id);
     this.name = name;
     this.description = description;
     this.barcode = barcode;
     this.type = type;
     this.size = size ?? null;
+    this.bag = bag;
   }
 
   public getId(): string {
@@ -44,6 +56,7 @@ export abstract class Product extends Entity {
       barcode: this.barcode,
       type: this.type,
       size: this.size,
+      bag: this.bag,
     };
   }
 
@@ -78,5 +91,9 @@ export abstract class Product extends Entity {
 
   setSize(size: string | null): void {
     this.size = size;
+  }
+
+  getBag(): Bag {
+    return this.bag;
   }
 }

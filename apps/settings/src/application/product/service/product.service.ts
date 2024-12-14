@@ -51,11 +51,11 @@ export class ProductService implements ProductServiceInterface {
   ): Promise<UpdateProductOutput> {
     if (!id) return null;
 
-    const product = await this.repository.findById(id);
+    const product = await this.repository.findById(id, { includeBag: true });
 
     updateOne(product, input);
 
-    await this.repository.save(product);
+    await this.bagService.addProduct(product.getBag().getId(), product);
 
     const { name, description, barcode, type, size } = product.toJSON();
 
