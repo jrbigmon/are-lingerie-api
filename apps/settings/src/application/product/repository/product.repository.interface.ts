@@ -3,7 +3,7 @@ import { RepositoryInterface } from '../../../../../@shared/repository/repositor
 import { Product } from '../../../domain/product/entity/product';
 
 export interface FindByIdOptions {
-  includeBag: boolean;
+  includeBag?: boolean;
 }
 
 export interface ProductRepositoryInterface

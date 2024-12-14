@@ -20,7 +20,7 @@ export class BagRepository implements BagRepositoryInterface {
 
   async findById(
     id: string,
-    { includeProducts = false }: FindByIdOptions,
+    { includeProducts = false }: FindByIdOptions = {},
   ): Promise<Bag | null> {
     if (!id) return null;
 

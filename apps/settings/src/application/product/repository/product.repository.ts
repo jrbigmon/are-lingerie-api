@@ -19,7 +19,7 @@ export class ProductRepository implements ProductRepositoryInterface {
 
   async findById(
     id: string,
-    { includeBag = false }: FindByIdOptions,
+    { includeBag = false }: FindByIdOptions = {},
   ): Promise<Product | null> {
     if (!id) return null;
 
