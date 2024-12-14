@@ -12,13 +12,15 @@ import { BagRepositoryInterface } from '../repository/bag.repository.interface';
 import { BagServiceInterface } from './bag.service.interface';
 import { ListBagInput, ListBagOutput } from '../dto/list-bag.dto';
 import { GetBagOutput } from '../dto/get-bag.dto';
-import { Product } from '../../../domain/product/entity/product';
+import { ProductRepositoryInterface } from '../../product/repository/product.repository.interface';
 
 @Injectable()
 export class BagService implements BagServiceInterface {
   constructor(
     @Inject('BagRepository')
     private readonly repository: BagRepositoryInterface,
+    @Inject('ProductRepository')
+    private readonly productRepository: ProductRepositoryInterface,
   ) {}
 
   public async createEmptyBag(
@@ -91,12 +93,15 @@ export class BagService implements BagServiceInterface {
     };
   }
 
-  public async addProduct(id: string, product: Product): Promise<boolean> {
-    if (!id || !product) return false;
+  public async addProduct(id: string, productId: string): Promise<boolean> {
+    if (!id || !productId) return false;
 
-    const bag = await this.repository.findById(id, { includeProducts: true });
+    const getProduct = this.productRepository.findById(productId);
+    const getBag = this.repository.findById(id, { includeProducts: true });
 
-    if (!bag) return false;
+    const [product, bag] = await Promise.all([getProduct, getBag]);
+
+    if (!bag || !product) return false;
 
     bag.addProduct(product);
 

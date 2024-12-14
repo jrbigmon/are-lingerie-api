@@ -6,6 +6,8 @@ import { DataSource } from 'typeorm';
 import { BagModel } from './model/bag.model';
 import { DATABASE_PROVIDE_NAME_PG } from '../../../utils/constants';
 import { BagControllerV1 } from './controller/bag.controller';
+import { ProductRepository } from '../product/repository/product.repository';
+import { ProductModel } from '../product/model/product.model';
 
 const services: Provider[] = [
   BagService,
@@ -15,8 +17,18 @@ const services: Provider[] = [
     useClass: BagRepository,
   },
   {
+    provide: 'ProductRepository',
+    useClass: ProductRepository,
+  },
+  {
     provide: 'BAG_MODEL',
     useFactory: (dataSource: DataSource) => dataSource.getRepository(BagModel),
+    inject: [DATABASE_PROVIDE_NAME_PG],
+  },
+  {
+    provide: 'PRODUCT_MODEL',
+    useFactory: (dataSource: DataSource) =>
+      dataSource.getRepository(ProductModel),
     inject: [DATABASE_PROVIDE_NAME_PG],
   },
 ];
