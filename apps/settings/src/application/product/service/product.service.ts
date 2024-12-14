@@ -31,7 +31,7 @@ export class ProductService implements ProductServiceInterface {
   async create(input: CreateProductInput): Promise<CreateProductOutput> {
     const product = createOne(input);
 
-    await this.bagService.addProduct(input.bagId, product);
+    await this.repository.save(product);
 
     const { id, name, description, barcode, type, size } = product.toJSON();
 
@@ -51,11 +51,13 @@ export class ProductService implements ProductServiceInterface {
   ): Promise<UpdateProductOutput> {
     if (!id) return null;
 
-    const product = await this.repository.findById(id, { includeBag: true });
+    const product = await this.repository.findById(id);
+
+    if (!product) return null;
 
     updateOne(product, input);
 
-    await this.bagService.addProduct(product.getBag().getId(), product);
+    await this.repository.save(product);
 
     const { name, description, barcode, type, size } = product.toJSON();
 

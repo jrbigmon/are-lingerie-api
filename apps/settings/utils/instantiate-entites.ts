@@ -11,7 +11,7 @@ import { Barcode } from '../src/domain/product/object-value/barcode';
 
 export const instantiateEntities = () => {
   const initProduct = (model: ProductModel) => {
-    const bag = initBag(model.bag);
+    const bag = model.bag ? initBag(model.bag) : null;
 
     if (model.type === Lingerie.name) {
       return new Lingerie({
