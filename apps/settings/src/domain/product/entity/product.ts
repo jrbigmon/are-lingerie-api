@@ -20,7 +20,7 @@ export abstract class Product extends Entity {
   protected barcode: Barcode;
   protected type: string;
   protected size?: string | null;
-  protected bag: Bag;
+  protected bag?: Bag | null;
 
   constructor({
     id,
@@ -37,7 +37,7 @@ export abstract class Product extends Entity {
     this.barcode = barcode;
     this.type = type;
     this.size = size ?? null;
-    this.bag = bag;
+    this.bag = bag ?? null;
   }
 
   public getId(): string {

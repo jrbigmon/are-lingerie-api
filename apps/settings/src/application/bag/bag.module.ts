@@ -12,6 +12,7 @@ import { ProductModel } from '../product/model/product.model';
 const services: Provider[] = [
   BagService,
   BagRepository,
+  ProductRepository,
   {
     provide: 'BagRepository',
     useClass: BagRepository,

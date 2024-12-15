@@ -7,7 +7,7 @@ export interface GenericProps {
   name: string;
   description: string;
   barcode: Barcode;
-  bag?: Bag;
+  bag?: Bag | null;
 }
 
 export class Generic extends Product {

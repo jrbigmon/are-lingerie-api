@@ -8,10 +8,16 @@ import { BagRepositoryInterface } from '../repository/bag.repository.interface';
 import { BagRepository } from '../repository/bag.repository';
 import { Bag } from '../../../domain/bag/entity/bag';
 import { DateRange } from '../../../domain/bag/object-value/date-range';
+import { Product } from '../../../domain/product/entity/product';
+import { Generic } from '../../../domain/product/entity/generic/generic';
+import { Barcode } from '../../../domain/product/object-value/barcode';
+import { ProductRepository } from '../../product/repository/product.repository';
+import { ProductRepositoryInterface } from '../../product/repository/product.repository.interface';
 
 describe('BagService integration tests', () => {
   let bagService: BagService;
   let repository: BagRepositoryInterface;
+  let productRepository: ProductRepositoryInterface;
 
   beforeEach(async () => {
     const fixture = await Test.createTestingModule({
@@ -20,6 +26,8 @@ describe('BagService integration tests', () => {
 
     bagService = fixture.get<BagService>(BagService);
     repository = fixture.get<BagRepositoryInterface>(BagRepository);
+    productRepository =
+      fixture.get<ProductRepositoryInterface>(ProductRepository);
 
     await fixture.init();
   });
@@ -155,6 +163,37 @@ describe('BagService integration tests', () => {
 
     it('should not return a bag when is not found', () => {
       return expect(bagService.get('123')).resolves.toBeNull();
+    });
+  });
+
+  describe('addProduct', () => {
+    it('should add a product to a bag', async () => {
+      await repository.save(
+        new Bag({
+          id: '123',
+          description: 'Bag 1',
+          dateRange: new DateRange({
+            dateOfReceipt: new Date('2022-01-01'),
+            deliveryDate: new Date('2022-01-15'),
+          }),
+        }),
+      );
+
+      const product = new Generic({
+        id: '123',
+        name: 'Lingerie 1',
+        description: 'Its a lingerie',
+        barcode: new Barcode('1234567890'),
+      });
+
+      await productRepository.save(product);
+
+      const output = await bagService.addProduct('123', '123');
+
+      const bag = await repository.findById('123', { includeProducts: true });
+
+      expect(output).toBeTruthy();
+      expect(bag.getProducts()).toMatchObject([product]);
     });
   });
 });

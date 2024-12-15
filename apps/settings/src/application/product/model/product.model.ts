@@ -1,6 +1,13 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  RelationId,
+} from 'typeorm';
 import { Model } from '../../../../../@shared/model/model';
-import { Bag } from '../../../domain/bag/entity/bag';
 import { BagModel } from '../../bag/model/bag.model';
 
 @Entity('product')
@@ -20,6 +27,9 @@ export class ProductModel extends Model {
   @Column({ nullable: true })
   size?: string;
 
-  @OneToMany(() => BagModel, (bag) => bag.products)
+  @ManyToOne((type) => BagModel)
   bag: BagModel;
+
+  @RelationId((productModel: ProductModel) => productModel.bag)
+  bagId: string;
 }

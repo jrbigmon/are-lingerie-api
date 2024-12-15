@@ -25,7 +25,7 @@ export class BagRepository implements BagRepositoryInterface {
     if (!id) return null;
 
     const bagModel = await this.bagModel.findOne({
-      where: { id: id },
+      where: { id },
       relations: {
         products: includeProducts,
       },
