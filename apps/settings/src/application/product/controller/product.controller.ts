@@ -1,4 +1,12 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ProductService } from '../service/product.service';
 import {
   CreateProductInput,
@@ -9,11 +17,13 @@ import {
   UpdateProductOutput,
 } from '../dto/update-product.dto';
 import { DataSource } from 'typeorm';
+import { DATABASE_PROVIDE_NAME_PG } from '../../../../utils/constants';
 
 @Controller('v1/products')
-export class ProductController {
+export class ProductControllerV1 {
   constructor(
     private readonly productService: ProductService,
+    @Inject(DATABASE_PROVIDE_NAME_PG)
     private readonly dataSource: DataSource,
   ) {}
 

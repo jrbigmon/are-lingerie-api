@@ -7,6 +7,7 @@ import { DatabaseModule } from '../database/database.module';
 import { ProductService } from './service/product.service';
 import { BagModule } from '../bag/bag.module';
 import { BagService } from '../bag/service/bag.service';
+import { ProductControllerV1 } from './controller/product.controller';
 
 const services: Provider[] = [
   ProductService,
@@ -29,7 +30,7 @@ const services: Provider[] = [
 
 @Module({
   imports: [DatabaseModule, BagModule],
-  controllers: [],
+  controllers: [ProductControllerV1],
   providers: services,
   exports: services,
 })

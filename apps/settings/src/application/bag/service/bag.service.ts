@@ -52,6 +52,12 @@ export class BagService implements BagServiceInterface {
 
     const bag = createLoaded(input);
 
+    const createProducts = bag.getProducts().map((product) => {
+      return this.productRepository.save(product, entityManager);
+    });
+
+    await Promise.all(createProducts);
+
     await this.repository.save(bag, entityManager);
 
     const { id, dateRange, description } = bag.toJSON();

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post } from '@nestjs/common';
+import { Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { BagService } from '../service/bag.service';
 import { ListBagInput, ListBagOutput } from '../dto/list-bag.dto';
 import {
@@ -10,32 +10,46 @@ import {
   CreateLoadBagOutput,
 } from '../dto/create-load-bag.dto';
 import { GetBagOutput } from '../dto/get-bag.dto';
+import { DataSource } from 'typeorm';
+import { DATABASE_PROVIDE_NAME_PG } from '../../../../utils/constants';
 
 @Controller('v1/bags')
 export class BagControllerV1 {
-  constructor(private readonly bagService: BagService) {}
+  constructor(
+    private readonly bagService: BagService,
+    @Inject(DATABASE_PROVIDE_NAME_PG)
+    private readonly dataSource: DataSource,
+  ) {}
 
   @Get()
   public async list(input: ListBagInput): Promise<ListBagOutput> {
-    return await this.bagService.list(input);
+    return await this.dataSource.transaction(async (entityManager) => {
+      return await this.bagService.list(input, entityManager);
+    });
   }
 
   @Get(':id')
   public async getById(@Param('id') id: string): Promise<GetBagOutput | null> {
-    return await this.bagService.get(id);
+    return await this.dataSource.transaction(async (entityManager) => {
+      return await this.bagService.get(id, entityManager);
+    });
   }
 
   @Post('empty')
   public async createEmptyBag(
     input: CreateEmptyBagInput,
   ): Promise<CreateEmptyBagOutput> {
-    return await this.bagService.createEmptyBag(input);
+    return await this.dataSource.transaction(async (entityManager) => {
+      return await this.bagService.createEmptyBag(input, entityManager);
+    });
   }
 
   @Post('loaded')
   public async createLoadedBag(
     input: CreateLoadBagInput,
   ): Promise<CreateLoadBagOutput> {
-    return await this.bagService.createLoadedBag(input);
+    return await this.dataSource.transaction(async (entityManager) => {
+      return await this.bagService.createLoadedBag(input, entityManager);
+    });
   }
 }
