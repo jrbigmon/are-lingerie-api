@@ -8,14 +8,20 @@ import {
   UpdateProductInput,
   UpdateProductOutput,
 } from '../dto/update-product.dto';
+import { DataSource } from 'typeorm';
 
 @Controller('v1/products')
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly dataSource: DataSource,
+  ) {}
 
   @Post()
   async create(input: CreateProductInput): Promise<CreateProductOutput> {
-    return await this.productService.create(input);
+    return await this.dataSource.transaction(async (entityManager) => {
+      return await this.productService.create(input, entityManager);
+    });
   }
 
   @Put()
@@ -23,21 +29,29 @@ export class ProductController {
     id: string,
     input: UpdateProductInput,
   ): Promise<UpdateProductOutput> {
-    return await this.productService.update(id, input);
+    return await this.dataSource.transaction(async (entityManager) => {
+      return await this.productService.update(id, input, entityManager);
+    });
   }
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
-    await this.productService.delete(id);
+    return await this.dataSource.transaction(async (entityManager) => {
+      await this.productService.delete(id, entityManager);
+    });
   }
 
   @Get(':id')
   async getById(@Param('id') id: string): Promise<CreateProductOutput | null> {
-    return await this.productService.get(id);
+    return await this.dataSource.transaction(async (entityManager) => {
+      return await this.productService.get(id, entityManager);
+    });
   }
 
   @Get()
   async list(): Promise<Array<CreateProductOutput>> {
-    return await this.productService.list({});
+    return await this.dataSource.transaction(async (entityManager) => {
+      return await this.productService.list({}, entityManager);
+    });
   }
 }

@@ -15,6 +15,7 @@ import {
 import { createProductService } from '../../../domain/product/service/create-product.service';
 import { updateProductService } from '../../../domain/product/service/update-product.service';
 import { BagServiceInterface } from '../../bag/service/bag.service.interface';
+import { EntityManager } from 'typeorm';
 
 const { createOne } = createProductService();
 const { updateOne } = updateProductService();
@@ -28,10 +29,15 @@ export class ProductService implements ProductServiceInterface {
     private readonly bagService: BagServiceInterface,
   ) {}
 
-  async create(input: CreateProductInput): Promise<CreateProductOutput> {
+  async create(
+    input: CreateProductInput,
+    entityManager?: EntityManager,
+  ): Promise<CreateProductOutput> {
     const product = createOne(input);
 
-    await this.repository.save(product);
+    await this.repository.save(product, entityManager);
+
+    await this.bagService.addProduct(input.bagId, product.getId());
 
     const { id, name, description, barcode, type, size } = product.toJSON();
 
@@ -48,16 +54,17 @@ export class ProductService implements ProductServiceInterface {
   async update(
     id: string,
     input: UpdateProductInput,
+    entityManager?: EntityManager,
   ): Promise<UpdateProductOutput> {
     if (!id) return null;
 
-    const product = await this.repository.findById(id);
+    const product = await this.repository.findById(id, {}, entityManager);
 
     if (!product) return null;
 
     updateOne(product, input);
 
-    await this.repository.save(product);
+    await this.repository.save(product, entityManager);
 
     const { name, description, barcode, type, size } = product.toJSON();
 
@@ -71,20 +78,26 @@ export class ProductService implements ProductServiceInterface {
     };
   }
 
-  async delete(id: string): Promise<DeleteProductOutput> {
+  async delete(
+    id: string,
+    entityManager?: EntityManager,
+  ): Promise<DeleteProductOutput> {
     if (!id) return;
 
-    const product = await this.repository.findById(id);
+    const product = await this.repository.findById(id, {}, entityManager);
 
     if (!product) {
       return;
     }
 
-    await this.repository.delete(product);
+    await this.repository.delete(product, entityManager);
   }
 
-  async list(input: ListProductInput): Promise<ListProductOutput> {
-    const products = await this.repository.findAll();
+  async list(
+    input: ListProductInput,
+    entityManager?: EntityManager,
+  ): Promise<ListProductOutput> {
+    const products = await this.repository.findAll(entityManager);
 
     const output = products.map((productModel) => {
       const product = productModel.toJSON();
@@ -102,10 +115,13 @@ export class ProductService implements ProductServiceInterface {
     return output;
   }
 
-  async get(id: string): Promise<GetProductOutput | null> {
+  async get(
+    id: string,
+    entityManager?: EntityManager,
+  ): Promise<GetProductOutput | null> {
     if (!id) return null;
 
-    const product = await this.repository.findById(id);
+    const product = await this.repository.findById(id, {}, entityManager);
 
     if (!product) return null;
 

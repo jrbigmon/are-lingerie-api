@@ -8,15 +8,21 @@ import { Repository } from 'typeorm';
 import { BagModel } from '../model/bag.model';
 import { instantiateEntities } from '../../../../utils/instantiate-entites';
 import { ProductModel } from '../../product/model/product.model';
+import { BaseRepository } from '../../../../../@shared/repository/base.repository';
 
 const { initBag } = instantiateEntities();
 
 @Injectable()
-export class BagRepository implements BagRepositoryInterface {
+export class BagRepository
+  extends BaseRepository
+  implements BagRepositoryInterface
+{
   constructor(
     @Inject('BAG_MODEL')
-    private readonly bagModel: Repository<BagModel>,
-  ) {}
+    protected readonly bagModel: Repository<BagModel>,
+  ) {
+    super(BagModel, bagModel);
+  }
 
   async findById(
     id: string,

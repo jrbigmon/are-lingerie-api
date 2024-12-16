@@ -5,25 +5,34 @@ import {
   FindByIdOptions,
   ProductRepositoryInterface,
 } from './product.repository.interface';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { instantiateEntities } from '../../../../utils/instantiate-entites';
+import { BaseRepository } from '../../../../../@shared/repository/base.repository';
 
 const { initProduct } = instantiateEntities();
 
 @Injectable()
-export class ProductRepository implements ProductRepositoryInterface {
+export class ProductRepository
+  extends BaseRepository
+  implements ProductRepositoryInterface
+{
   constructor(
     @Inject('PRODUCT_MODEL')
-    private readonly productModel: Repository<ProductModel>,
-  ) {}
+    protected readonly productModel: Repository<ProductModel>,
+  ) {
+    super(ProductModel, productModel);
+  }
 
   async findById(
     id: string,
     { includeBag = false }: FindByIdOptions = {},
+    entityManager?: EntityManager,
   ): Promise<Product | null> {
+    const model = this.getSQLRepository(entityManager);
+
     if (!id) return null;
 
-    const productModel = await this.productModel.findOne({
+    const productModel = await model.findOne({
       where: { id },
       relations: {
         bag: includeBag,
@@ -35,16 +44,20 @@ export class ProductRepository implements ProductRepositoryInterface {
     return initProduct(productModel);
   }
 
-  async findAll(): Promise<Array<Product>> {
-    const productModels = await this.productModel.find({});
+  async findAll(entityManager?: EntityManager): Promise<Array<Product>> {
+    const model = this.getSQLRepository(entityManager);
+
+    const productModels = await model.find({});
 
     return productModels.map((model) => initProduct(model));
   }
 
-  async save(entity: Product): Promise<void> {
+  async save(entity: Product, entityManager?: EntityManager): Promise<void> {
+    const model = this.getSQLRepository(entityManager);
+
     const { id, name, description, barcode, type, size } = entity.toJSON();
 
-    await this.productModel.save({
+    await model.save({
       id,
       name,
       description,
@@ -54,9 +67,11 @@ export class ProductRepository implements ProductRepositoryInterface {
     } as ProductModel);
   }
 
-  async delete(product: Product): Promise<void> {
+  async delete(product: Product, entityManager?: EntityManager): Promise<void> {
+    const model = this.getSQLRepository(entityManager);
+
     if (!product) return;
 
-    await this.productModel.softDelete({ id: product.getId() });
+    await model.softDelete({ id: product.getId() });
   }
 }
