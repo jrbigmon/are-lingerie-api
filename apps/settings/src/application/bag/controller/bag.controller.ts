@@ -1,4 +1,12 @@
-import { Controller, Get, Inject, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { BagService } from '../service/bag.service';
 import { ListBagInput, ListBagOutput } from '../dto/list-bag.dto';
 import {
@@ -22,7 +30,7 @@ export class BagControllerV1 {
   ) {}
 
   @Get()
-  public async list(input: ListBagInput): Promise<ListBagOutput> {
+  public async list(@Query() input: ListBagInput): Promise<ListBagOutput> {
     return await this.dataSource.transaction(async (entityManager) => {
       return await this.bagService.list(input, entityManager);
     });
@@ -37,7 +45,7 @@ export class BagControllerV1 {
 
   @Post('empty')
   public async createEmptyBag(
-    input: CreateEmptyBagInput,
+    @Body() input: CreateEmptyBagInput,
   ): Promise<CreateEmptyBagOutput> {
     return await this.dataSource.transaction(async (entityManager) => {
       return await this.bagService.createEmptyBag(input, entityManager);
@@ -46,7 +54,7 @@ export class BagControllerV1 {
 
   @Post('loaded')
   public async createLoadedBag(
-    input: CreateLoadBagInput,
+    @Body() input: CreateLoadBagInput,
   ): Promise<CreateLoadBagOutput> {
     return await this.dataSource.transaction(async (entityManager) => {
       return await this.bagService.createLoadedBag(input, entityManager);

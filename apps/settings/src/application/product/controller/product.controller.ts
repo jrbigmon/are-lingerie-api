@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -28,16 +29,18 @@ export class ProductControllerV1 {
   ) {}
 
   @Post()
-  async create(input: CreateProductInput): Promise<CreateProductOutput> {
+  async create(
+    @Body() input: CreateProductInput,
+  ): Promise<CreateProductOutput> {
     return await this.dataSource.transaction(async (entityManager) => {
       return await this.productService.create(input, entityManager);
     });
   }
 
-  @Put()
+  @Put(':id')
   async update(
-    id: string,
-    input: UpdateProductInput,
+    @Param('id') id: string,
+    @Body() input: UpdateProductInput,
   ): Promise<UpdateProductOutput> {
     return await this.dataSource.transaction(async (entityManager) => {
       return await this.productService.update(id, input, entityManager);
