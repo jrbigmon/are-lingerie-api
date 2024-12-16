@@ -4,7 +4,7 @@ import {
   BagRepositoryInterface,
   FindByIdOptions,
 } from './bag.repository.interface';
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { BagModel } from '../model/bag.model';
 import { instantiateEntities } from '../../../../utils/instantiate-entites';
 import { ProductModel } from '../../product/model/product.model';
@@ -27,10 +27,13 @@ export class BagRepository
   async findById(
     id: string,
     { includeProducts = false }: FindByIdOptions = {},
+    entityManager?: EntityManager,
   ): Promise<Bag | null> {
+    const model = this.getSQLRepository(entityManager);
+
     if (!id) return null;
 
-    const bagModel = await this.bagModel.findOne({
+    const bagModel = await model.findOne({
       where: { id },
       relations: {
         products: includeProducts,
@@ -42,16 +45,20 @@ export class BagRepository
     return initBag(bagModel);
   }
 
-  async findAll(): Promise<Array<Bag>> {
-    const bagModels = await this.bagModel.find({});
+  async findAll(entityManager?: EntityManager): Promise<Array<Bag>> {
+    const model = this.getSQLRepository(entityManager);
+
+    const bagModels = await model.find({});
 
     return bagModels.map((model) => initBag(model));
   }
 
-  async save(entity: Bag): Promise<void> {
+  async save(entity: Bag, entityManager?: EntityManager): Promise<void> {
+    const model = this.getSQLRepository(entityManager);
+
     const { id, description, dateRange, products } = entity.toJSON();
 
-    await this.bagModel.save({
+    await model.save({
       id,
       description,
       dateOfReceipt: dateRange.getDateOfReceipt(),

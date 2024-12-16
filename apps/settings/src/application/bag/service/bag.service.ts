@@ -13,6 +13,7 @@ import { BagServiceInterface } from './bag.service.interface';
 import { ListBagInput, ListBagOutput } from '../dto/list-bag.dto';
 import { GetBagOutput } from '../dto/get-bag.dto';
 import { ProductRepositoryInterface } from '../../product/repository/product.repository.interface';
+import { EntityManager } from 'typeorm';
 
 @Injectable()
 export class BagService implements BagServiceInterface {
@@ -25,12 +26,13 @@ export class BagService implements BagServiceInterface {
 
   public async createEmptyBag(
     input: CreateEmptyBagInput,
+    entityManager?: EntityManager,
   ): Promise<CreateEmptyBagOutput> {
     const { createEmpty } = createBagService();
 
     const bag = createEmpty(input);
 
-    await this.repository.save(bag);
+    await this.repository.save(bag, entityManager);
 
     const { id, dateRange, description } = bag.toJSON();
 
@@ -44,12 +46,13 @@ export class BagService implements BagServiceInterface {
 
   public async createLoadedBag(
     input: CreateLoadBagInput,
+    entityManager?: EntityManager,
   ): Promise<CreateLoadBagOutput> {
     const { createLoaded } = createBagService();
 
     const bag = createLoaded(input);
 
-    await this.repository.save(bag);
+    await this.repository.save(bag, entityManager);
 
     const { id, dateRange, description } = bag.toJSON();
 
@@ -61,8 +64,11 @@ export class BagService implements BagServiceInterface {
     };
   }
 
-  public async list(input: ListBagInput = {}): Promise<ListBagOutput> {
-    const bags = await this.repository.findAll();
+  public async list(
+    input: ListBagInput = {},
+    entityManager?: EntityManager,
+  ): Promise<ListBagOutput> {
+    const bags = await this.repository.findAll(entityManager);
 
     const output = bags.map((bagClass) => {
       const bag = bagClass.toJSON();
@@ -78,8 +84,11 @@ export class BagService implements BagServiceInterface {
     return output;
   }
 
-  public async get(id: string): Promise<GetBagOutput | null> {
-    const bag = await this.repository.findById(id);
+  public async get(
+    id: string,
+    entityManager?: EntityManager,
+  ): Promise<GetBagOutput | null> {
+    const bag = await this.repository.findById(id, {}, entityManager);
 
     if (!bag) return null;
 
@@ -93,11 +102,23 @@ export class BagService implements BagServiceInterface {
     };
   }
 
-  public async addProduct(id: string, productId: string): Promise<boolean> {
+  public async addProduct(
+    id: string,
+    productId: string,
+    entityManager?: EntityManager,
+  ): Promise<boolean> {
     if (!id || !productId) return false;
 
-    const getProduct = this.productRepository.findById(productId);
-    const getBag = this.repository.findById(id, { includeProducts: true });
+    const getProduct = this.productRepository.findById(
+      productId,
+      {},
+      entityManager,
+    );
+    const getBag = this.repository.findById(
+      id,
+      { includeProducts: true },
+      entityManager,
+    );
 
     const [product, bag] = await Promise.all([getProduct, getBag]);
 
@@ -105,7 +126,7 @@ export class BagService implements BagServiceInterface {
 
     bag.addProduct(product);
 
-    await this.repository.save(bag);
+    await this.repository.save(bag, entityManager);
 
     return true;
   }
