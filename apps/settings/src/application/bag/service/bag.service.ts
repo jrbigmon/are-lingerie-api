@@ -14,6 +14,7 @@ import { ListBagInput, ListBagOutput } from '../dto/list-bag.dto';
 import { GetBagOutput } from '../dto/get-bag.dto';
 import { ProductRepositoryInterface } from '../../product/repository/product.repository.interface';
 import { EntityManager } from 'typeorm';
+import { InvalidAttribute } from '../../../../../@shared/error/invalid-attribute';
 
 @Injectable()
 export class BagService implements BagServiceInterface {
@@ -128,7 +129,17 @@ export class BagService implements BagServiceInterface {
 
     const [product, bag] = await Promise.all([getProduct, getBag]);
 
-    if (!bag || !product) return false;
+    if (!bag) {
+      throw new InvalidAttribute('bagId', id, BagService.name, [
+        'Bag not found',
+      ]);
+    }
+
+    if (!product) {
+      throw new InvalidAttribute('productId', productId, BagService.name, [
+        'Product not found',
+      ]);
+    }
 
     bag.addProduct(product);
 
