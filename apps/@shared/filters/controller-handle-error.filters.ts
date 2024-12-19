@@ -15,13 +15,14 @@ export class CatchEverythingFilter implements ExceptionFilter {
   constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   private parseMessage(error: GatewayError, path: string) {
-    if (Array.isArray(error)) {
+    if (Array.isArray(error) && error[0] instanceof InvalidAttribute) {
+      console.log(error[0] instanceof InvalidAttribute);
       return {
         path,
         statusCode: 400,
-        message: error.map((err) => err.message).join(', '),
         timestamp: error[0].timestamp,
-        error: error,
+        message: error.map((error) => error.message)?.flatMap((error) => error),
+        error,
       };
     }
 
@@ -29,9 +30,9 @@ export class CatchEverythingFilter implements ExceptionFilter {
       return {
         path,
         statusCode: 400,
-        message: error.message,
         timestamp: error.timestamp,
-        error: error,
+        message: error.message,
+        error,
       };
     }
 
@@ -39,9 +40,9 @@ export class CatchEverythingFilter implements ExceptionFilter {
       return {
         path,
         statusCode: 409,
-        message: error.message,
         timestamp: error.timestamp,
-        error: error,
+        message: error.message,
+        error,
       };
     }
 
@@ -49,9 +50,9 @@ export class CatchEverythingFilter implements ExceptionFilter {
       return {
         path,
         statusCode: 500,
-        message: 'An unexpected error occurred',
         timestamp: new Date(),
-        error: error,
+        message: 'An unexpected error occurred',
+        error,
       };
     }
   }
