@@ -1,5 +1,5 @@
 export interface CreateProductInput {
-  bagId: string;
+  bagId?: string;
   name: string;
   description: string;
   barcode: string;

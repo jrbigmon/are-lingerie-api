@@ -37,11 +37,13 @@ export class ProductService implements ProductServiceInterface {
 
     await this.repository.save(product, entityManager);
 
-    await this.bagService.addProduct(
-      input.bagId,
-      product.getId(),
-      entityManager,
-    );
+    if (input.bagId) {
+      await this.bagService.addProduct(
+        input.bagId,
+        product.getId(),
+        entityManager,
+      );
+    }
 
     const { id, name, description, barcode, type, size } = product.toJSON();
 
