@@ -5,10 +5,13 @@ import { ProductService } from './product.service';
 import { ProductRepository } from '../repository/product.repository';
 import { CreateProductInput } from '../dto/create-product.dto';
 import { UpdateProductInput } from '../dto/update-product.dto';
+import { BagService } from '../../bag/service/bag.service';
 
 describe('ProductService integration tests', () => {
   let productService: ProductService;
   let repository: ProductRepositoryInterface;
+  let bagService: BagService;
+  let bagId: string = null;
 
   beforeEach(async () => {
     const fixture = await Test.createTestingModule({
@@ -16,9 +19,20 @@ describe('ProductService integration tests', () => {
     }).compile();
 
     productService = fixture.get<ProductService>(ProductService);
+    bagService = fixture.get<BagService>(BagService);
     repository = fixture.get<ProductRepositoryInterface>(ProductRepository);
 
     await fixture.init();
+  });
+
+  beforeEach(async () => {
+    const bag = await bagService.createEmptyBag({
+      description: 'MyBag',
+      dateOfReceipt: '2022-01-01',
+      deliveryDate: '2022-01-15',
+    });
+
+    bagId = bag.id;
   });
 
   it('should be defined productService', () => {
@@ -28,7 +42,7 @@ describe('ProductService integration tests', () => {
   describe('create', () => {
     it('should be create a new generic product', async () => {
       const input: CreateProductInput = {
-        bagId: '123',
+        bagId,
         name: 'Product 1',
         description: 'Description 1',
         barcode: '1234567890',
@@ -52,7 +66,7 @@ describe('ProductService integration tests', () => {
   describe('update', () => {
     it('should be update a generic product', async () => {
       const input: CreateProductInput = {
-        bagId: '123',
+        bagId,
         name: 'Product 1',
         description: 'Description 1',
         barcode: '1234567890',
@@ -89,7 +103,7 @@ describe('ProductService integration tests', () => {
   describe('delete', () => {
     it('should delete a product', async () => {
       const input: CreateProductInput = {
-        bagId: '123',
+        bagId,
         name: 'Product 1',
         description: 'Description 1',
         barcode: '1234567890',
@@ -108,7 +122,7 @@ describe('ProductService integration tests', () => {
   describe('list', () => {
     it('should list all products', async () => {
       const input: CreateProductInput = {
-        bagId: '123',
+        bagId,
         name: 'Product 1',
         description: 'Description 1',
         barcode: '1234567890',
@@ -136,7 +150,7 @@ describe('ProductService integration tests', () => {
   describe('get', () => {
     it('should get a product by id', async () => {
       const input: CreateProductInput = {
-        bagId: '123',
+        bagId,
         name: 'Product 1',
         description: 'Description 1',
         barcode: '1234567890',
