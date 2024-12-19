@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { BagModule } from './application/bag/bag.module';
 import { ProductModule } from './application/product/product.module';
-import { APP_INTERCEPTOR } from '@nestjs/core';
-import { ControllerInterceptorErrorHandler } from '../../@shared/error/controller-handle-error';
+import { APP_FILTER } from '@nestjs/core';
+import { CatchEverythingFilter } from '../../@shared/filters/controller-handle-error.filters';
 
 @Module({
   imports: [BagModule, ProductModule],
   providers: [
     {
-      provide: APP_INTERCEPTOR,
-      useClass: ControllerInterceptorErrorHandler,
+      provide: APP_FILTER,
+      useClass: CatchEverythingFilter,
     },
   ],
 })
