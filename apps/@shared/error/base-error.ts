@@ -1,5 +1,4 @@
 export abstract class BaseError {
-  public isClientError: boolean = true;
   public timestamp: Date = new Date();
 
   constructor(
