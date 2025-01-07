@@ -1,4 +1,6 @@
 import { Entity } from '../../../../../@shared/entity/entity';
+import { validateSyncData } from '../../../../../@shared/validation/validate-sync-data';
+import { ProductValidation } from './product.validation';
 
 export interface ProductProps {
   id: string;
@@ -49,7 +51,15 @@ export class Product extends Entity {
   }
 
   isValid(): boolean {
-    // throw new Error('Method not implemented.');
+    const errors = validateSyncData(
+      new ProductValidation(this.toJSON()),
+      Product.name,
+    );
+
+    if (errors.length) {
+      throw errors;
+    }
+
     return true;
   }
 
