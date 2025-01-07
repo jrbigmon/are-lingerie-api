@@ -10,8 +10,6 @@ describe('ProductOrder', () => {
       description: 'Product description',
       purchasePrice: 100,
       sellingPrice: 100,
-      type: 'Lingerie',
-      size: 'small',
     });
 
     const productOrder = new ProductOrder({
@@ -48,8 +46,6 @@ describe('ProductOrder', () => {
         description: 'Product description',
         purchasePrice: 100,
         sellingPrice: 100,
-        type: 'Lingerie',
-        size: 'small',
       });
 
       new ProductOrder({
@@ -109,8 +105,6 @@ describe('ProductOrder', () => {
         description: 'Product description',
         purchasePrice: 100,
         sellingPrice: 100,
-        type: 'Lingerie',
-        size: 'small',
       });
 
       new ProductOrder({

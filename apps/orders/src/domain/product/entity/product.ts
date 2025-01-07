@@ -4,8 +4,6 @@ export interface ProductProps {
   id: string;
   name: string;
   description: string;
-  type: string;
-  size?: string;
   barcode: string;
   purchasePrice: number;
   sellingPrice: number;
@@ -17,8 +15,6 @@ export class Product extends Entity {
   private barcode: string;
   private purchasePrice: number;
   private sellingPrice: number;
-  private type?: string;
-  private size?: string;
 
   constructor({
     id,
@@ -27,8 +23,6 @@ export class Product extends Entity {
     barcode,
     purchasePrice,
     sellingPrice,
-    size,
-    type,
   }: ProductProps) {
     super(id);
     this.name = name;
@@ -36,8 +30,6 @@ export class Product extends Entity {
     this.barcode = barcode;
     this.purchasePrice = purchasePrice;
     this.sellingPrice = sellingPrice;
-    this.size = size;
-    this.type = type;
     this.isValid();
   }
 
@@ -69,8 +61,6 @@ export class Product extends Entity {
       barcode: this.barcode,
       purchasePrice: this.purchasePrice,
       sellingPrice: this.sellingPrice,
-      size: this.size,
-      type: this.type,
     };
   }
 }
