@@ -1,21 +1,18 @@
 import { EntityManager, Repository } from 'typeorm';
 import { RepositoryInterface } from './repository.interface';
+import { Entity } from '../entity/entity';
 
-export class BaseRepository<T = any> implements RepositoryInterface<T> {
+export class BaseRepository<Model> {
   constructor(
-    protected readonly entityClass: new (...args: any[]) => T,
-    protected readonly model: Repository<T>,
+    protected readonly entityClass: new (...args: any[]) => Model,
+    protected readonly model: Repository<Model>,
   ) {}
 
-  getSQLRepository(entityManager?: EntityManager): Repository<T> {
+  getSQLRepository(entityManager?: EntityManager): Repository<Model> {
     if (entityManager) {
       return entityManager.getRepository(this.entityClass);
     }
 
     return this.model;
-  }
-
-  save(entity: T, entityManager?: EntityManager): Promise<void> {
-    throw new Error('Method not implemented.');
   }
 }

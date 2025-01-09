@@ -14,7 +14,7 @@ const { initBag } = instantiateEntities();
 
 @Injectable()
 export class BagRepository
-  extends BaseRepository
+  extends BaseRepository<BagModel>
   implements BagRepositoryInterface
 {
   constructor(

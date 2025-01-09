@@ -2,13 +2,14 @@ import { EntityManager } from 'typeorm';
 import { RepositoryInterface } from '../../../../../@shared/repository/repository.interface';
 // import { LingerieSize } from '../../../domain/product/entity/lingerie/lingerie';
 import { Product } from '../../../domain/product/entity/product';
+import { ProductModel } from '../model/product.model';
 
 export interface FindByIdOptions {
   includeBag?: boolean;
 }
 
 export interface ProductRepositoryInterface
-  extends RepositoryInterface<Product> {
+  extends RepositoryInterface<ProductModel, Product> {
   findById(
     id: string,
     options?: FindByIdOptions,

@@ -1,6 +1,7 @@
 import { EntityManager, Repository } from 'typeorm';
+import { Entity } from '../entity/entity';
 
-export interface RepositoryInterface<T> {
-  getSQLRepository(entityManager: EntityManager): Repository<T>;
-  save(entity: T, entityManager?: EntityManager): Promise<void>;
+export interface RepositoryInterface<Model, E extends Entity> {
+  getSQLRepository(entityManager: EntityManager): Repository<Model>;
+  save(entity: E, entityManager?: EntityManager): Promise<void>;
 }

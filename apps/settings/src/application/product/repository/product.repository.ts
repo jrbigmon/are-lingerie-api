@@ -13,7 +13,7 @@ const { initProduct } = instantiateEntities();
 
 @Injectable()
 export class ProductRepository
-  extends BaseRepository
+  extends BaseRepository<ProductModel>
   implements ProductRepositoryInterface
 {
   constructor(
