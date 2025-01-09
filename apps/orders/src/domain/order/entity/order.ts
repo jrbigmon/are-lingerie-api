@@ -60,7 +60,7 @@ export class Order extends Entity {
     return true;
   }
 
-  toJSON(): object {
+  toJSON() {
     return {
       id: this.id,
       customer: this.customer.toJSON(),
