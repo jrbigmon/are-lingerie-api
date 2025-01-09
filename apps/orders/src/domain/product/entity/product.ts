@@ -68,6 +68,6 @@ export class Product extends Entity {
     const sellingPrice = this.getSellingPrice();
     const purchasePrice = this.getPurchasePrice();
 
-    return (sellingPrice * 100) / purchasePrice;
+    return 100 - (sellingPrice * 100) / purchasePrice;
   }
 }

@@ -45,4 +45,17 @@ describe('Product entity', () => {
       expect(errors[0].message).toMatchObject(['Product id is required']);
     }
   });
+
+  it('should be instantiate a product and have a 2% of discount', () => {
+    const product = new Product({
+      id: '123',
+      barcode: '12333321321',
+      name: 'Product 1',
+      description: 'Product description',
+      purchasePrice: 100,
+      sellingPrice: 98,
+    });
+
+    expect(product.getPercentOfDiscount()).toBe(2);
+  });
 });
