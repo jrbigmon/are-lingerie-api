@@ -3,4 +3,8 @@ export abstract class Entity {
 
   abstract isValid(): boolean;
   abstract toJSON(): object;
+
+  public getId() {
+    return this.id;
+  }
 }
