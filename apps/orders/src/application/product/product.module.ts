@@ -5,6 +5,7 @@ import { ProductRepository } from './repository/product.repository';
 import { DataSource } from 'typeorm';
 import { DATABASE_PROVIDE_NAME_PG } from '../../../utils/constants';
 import { ProductModel } from './model/product.model';
+import { ProductControllerV1 } from './controller/product.controller';
 
 const services: Provider[] = [
   ProductService,
@@ -23,6 +24,7 @@ const services: Provider[] = [
 
 @Module({
   imports: [DatabaseModule],
+  controllers: [ProductControllerV1],
   providers: services,
   exports: services,
 })
