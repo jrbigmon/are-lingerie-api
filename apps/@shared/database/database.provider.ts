@@ -1,10 +1,7 @@
-import { DataSource } from 'typeorm';
-import { BagModel } from '../bag/model/bag.model';
-import { DATABASE_PROVIDE_NAME_PG } from '../../../utils/constants';
+import { DataSource, EntitySchema, MixedList } from 'typeorm';
 import { parse } from 'url';
-import { ProductModel } from '../product/model/product.model';
 
-export const entities = [BagModel, ProductModel];
+export type EntityProvide = MixedList<string | Function | EntitySchema<any>>;
 
 const parseDatabaseUrl = (dbUrl: string) => {
   const parsedUrl = parse(dbUrl, false);
@@ -20,11 +17,11 @@ const parseDatabaseUrl = (dbUrl: string) => {
   };
 };
 
-const productionProvider = [
+const productionProvider = (provide: string, entities: EntityProvide) => [
   {
-    provide: DATABASE_PROVIDE_NAME_PG,
+    provide,
     useFactory: async () => {
-      const dbConfig = parseDatabaseUrl(process.env.SETTINGS_DATABASE_URL);
+      const dbConfig = parseDatabaseUrl(process.env.ORDER_DATABASE_URL);
 
       const dataSource = new DataSource({
         type: 'postgres',
@@ -43,9 +40,9 @@ const productionProvider = [
   },
 ];
 
-const testProvider = [
+const testProvider = (provide: string, entities: EntityProvide) => [
   {
-    provide: DATABASE_PROVIDE_NAME_PG,
+    provide,
     useFactory: async () => {
       const dataSource = new DataSource({
         type: 'sqlite',
@@ -60,10 +57,11 @@ const testProvider = [
   },
 ];
 
-const getDatabaseProvider = () => {
-  if (process.env.NODE_ENV === 'test') return testProvider;
+export const getDatabaseProvider = (
+  provide: string,
+  entities: EntityProvide,
+) => {
+  if (process.env.NODE_ENV === 'test') return testProvider(provide, entities);
 
-  return productionProvider;
+  return productionProvider(provide, entities);
 };
-
-export const databaseProviders = getDatabaseProvider();
