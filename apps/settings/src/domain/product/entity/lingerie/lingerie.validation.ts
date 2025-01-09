@@ -1,11 +1,11 @@
 import { IsNotEmpty } from 'class-validator';
-import { LingerieProps, LingerieSize } from './lingerie';
+import { Lingerie, LingerieProps, LingerieSize } from './lingerie';
 
 export class LingerieValidator {
   @IsNotEmpty({ message: 'Product size is required' })
-  size: LingerieSize;
+  size: string;
 
-  constructor({ size }: Pick<LingerieProps, 'size'>) {
-    this.size = size;
+  constructor(lingerie: Lingerie) {
+    this.size = lingerie.getSize();
   }
 }

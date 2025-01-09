@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { ProductProps } from './product';
+import { Product, ProductProps } from './product';
 import { Barcode } from '../object-value/barcode';
 
 export class ProductValidator {
@@ -18,11 +18,11 @@ export class ProductValidator {
   @IsNotEmpty({ message: 'Product type is required' })
   type: string;
 
-  constructor({ id, name, description, barcode, type }: ProductProps) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.barcode = barcode;
-    this.type = type;
+  constructor(product: Product) {
+    this.id = product.getId();
+    this.name = product.getName();
+    this.description = product.getDescription();
+    this.barcode = product.getBarcode();
+    this.type = product.getType();
   }
 }

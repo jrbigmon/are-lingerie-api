@@ -14,6 +14,7 @@ export interface BagProps {
 export class Bag extends Entity {
   private description: string;
   private dateRange: DateRange;
+
   private products: Map<string, Product> = new Map();
 
   constructor({ id, description, dateRange }: BagProps) {
@@ -53,7 +54,7 @@ export class Bag extends Entity {
   }
 
   isValid(): boolean {
-    const errors = validateSyncData(new BagValidation(this.toJSON()), Bag.name);
+    const errors = validateSyncData(new BagValidation(this), Bag.name);
 
     if (errors.length) {
       throw errors;
@@ -62,7 +63,19 @@ export class Bag extends Entity {
     return true;
   }
 
-  getId(): string {
-    return this.id;
+  public getDescription(): string {
+    return this.description;
+  }
+
+  public setDescription(description: string): void {
+    this.description = description;
+  }
+
+  public getDateRange(): DateRange {
+    return this.dateRange;
+  }
+
+  public setDateRange(dateRange: DateRange): void {
+    this.dateRange = dateRange;
   }
 }

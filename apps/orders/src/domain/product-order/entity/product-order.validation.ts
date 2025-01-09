@@ -1,6 +1,6 @@
 import { IsNotEmpty, Min, ValidateIf } from 'class-validator';
 import { Product } from '../../product/entity/product';
-import { ProductOrderProps } from './product-order';
+import { ProductOrder, ProductOrderProps } from './product-order';
 
 export class ProductOrderValidation {
   @IsNotEmpty({ message: 'Product order id is required' })
@@ -13,9 +13,9 @@ export class ProductOrderValidation {
   @Min(1, { message: 'Product order quantity must be greater than 1' })
   public quantity?: number;
 
-  constructor({ id, product, quantity }: ProductOrderProps) {
-    this.id = id;
-    this.product = product;
-    this.quantity = quantity;
+  constructor(productOrder: ProductOrder) {
+    this.id = productOrder.getId();
+    this.product = productOrder.getProduct();
+    this.quantity = productOrder.getQuantity();
   }
 }

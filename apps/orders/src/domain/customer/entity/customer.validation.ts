@@ -4,7 +4,7 @@ import {
   IsPhoneNumber,
   ValidateIf,
 } from 'class-validator';
-import { CustomerProps } from './customer';
+import { Customer, CustomerProps } from './customer';
 
 export class CustomerValidation {
   @IsNotEmpty({ message: 'Customer id is required' })
@@ -22,10 +22,10 @@ export class CustomerValidation {
   })
   phone?: string;
 
-  constructor({ id, email, fullName, phone }: CustomerProps) {
-    this.id = id;
-    this.email = email;
-    this.fullName = fullName;
-    this.phone = phone;
+  constructor(customer: Customer) {
+    this.id = customer.getId();
+    this.email = customer.getEmail();
+    this.fullName = customer.getFullName();
+    this.phone = customer.getPhone();
   }
 }

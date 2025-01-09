@@ -27,8 +27,6 @@ describe('ProductOrder', () => {
         description: 'Product description',
         purchasePrice: 100,
         sellingPrice: 100,
-        type: 'Lingerie',
-        size: 'small',
       },
       quantity: 2,
     });

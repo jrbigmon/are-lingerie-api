@@ -20,14 +20,6 @@ export class ProductOrder extends Entity {
     this.isValid();
   }
 
-  getProduct(): Product {
-    return this.product;
-  }
-
-  getQuantity(): number {
-    return this.quantity;
-  }
-
   toJSON() {
     return {
       id: this.id,
@@ -38,7 +30,7 @@ export class ProductOrder extends Entity {
 
   isValid(): boolean {
     const errors = validateSyncData(
-      new ProductOrderValidation(this.toJSON()),
+      new ProductOrderValidation(this),
       ProductOrder.name,
     );
 
@@ -47,6 +39,14 @@ export class ProductOrder extends Entity {
     }
 
     return true;
+  }
+
+  getProduct(): Product {
+    return this.product;
+  }
+
+  getQuantity(): number {
+    return this.quantity;
   }
 
   getTotal(): number {

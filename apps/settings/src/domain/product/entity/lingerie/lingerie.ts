@@ -30,10 +30,7 @@ export class Lingerie extends Product {
   isValid(): boolean {
     super.isValid();
 
-    const errors = validateSyncData(
-      new LingerieValidator({ size: this.size as LingerieSize }),
-      Lingerie.name,
-    );
+    const errors = validateSyncData(new LingerieValidator(this), Lingerie.name);
 
     if (errors.length) {
       throw errors;

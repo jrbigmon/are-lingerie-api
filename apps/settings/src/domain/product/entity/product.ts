@@ -40,14 +40,6 @@ export abstract class Product extends Entity {
     this.bag = bag ?? null;
   }
 
-  public getId(): string {
-    return this.id;
-  }
-
-  public getBarcode(): Barcode {
-    return this.barcode;
-  }
-
   toJSON() {
     return {
       id: this.id,
@@ -61,10 +53,7 @@ export abstract class Product extends Entity {
   }
 
   isValid(): boolean {
-    const errors = validateSyncData(
-      new ProductValidator(this.toJSON()),
-      this.type,
-    );
+    const errors = validateSyncData(new ProductValidator(this), this.type);
 
     if (errors.length) {
       throw errors;
@@ -73,20 +62,40 @@ export abstract class Product extends Entity {
     return true;
   }
 
+  getName(): string {
+    return this.name;
+  }
+
   setName(name: string): void {
     this.name = name;
+  }
+
+  getDescription(): string {
+    return this.description;
   }
 
   setDescription(description: string): void {
     this.description = description;
   }
 
+  getBarcode(): Barcode {
+    return this.barcode;
+  }
+
   setBarcode(barcode: string): void {
     this.barcode = new Barcode(barcode);
   }
 
+  getType(): string {
+    return this.type;
+  }
+
   setType(type: string): void {
     this.type = type;
+  }
+
+  getSize(): string | null {
+    return this.size;
   }
 
   setSize(size: string | null): void {
@@ -95,5 +104,9 @@ export abstract class Product extends Entity {
 
   getBag(): Bag {
     return this.bag;
+  }
+
+  setBag(bag: Bag): void {
+    this.bag = bag;
   }
 }

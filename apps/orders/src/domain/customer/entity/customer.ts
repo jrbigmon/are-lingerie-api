@@ -25,7 +25,7 @@ export class Customer extends Entity {
 
   isValid(): boolean {
     const errors = validateSyncData(
-      new CustomerValidation(this.toJSON()),
+      new CustomerValidation(this),
       Customer.name,
     );
 
@@ -53,5 +53,29 @@ export class Customer extends Entity {
     } catch (_error) {
       return phone;
     }
+  }
+
+  public getFullName(): string {
+    return this.fullName;
+  }
+
+  public setFullName(fullName: string): void {
+    this.fullName = fullName;
+  }
+
+  public getEmail(): string {
+    return this.email;
+  }
+
+  public setEmail(email: string): void {
+    this.email = email;
+  }
+
+  public getPhone?(): string {
+    return this.phone;
+  }
+
+  public setPhone?(phone?: string): void {
+    this.phone = phone;
   }
 }

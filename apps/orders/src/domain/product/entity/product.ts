@@ -35,26 +35,8 @@ export class Product extends Entity {
     this.isValid();
   }
 
-  getPurchasePrice(): number {
-    return this.purchasePrice;
-  }
-
-  getSellingPrice(): number {
-    return this.sellingPrice;
-  }
-
-  getPercentOfDiscount(): number {
-    const sellingPrice = this.getSellingPrice();
-    const purchasePrice = this.getPurchasePrice();
-
-    return (sellingPrice * 100) / purchasePrice;
-  }
-
   isValid(): boolean {
-    const errors = validateSyncData(
-      new ProductValidation(this.toJSON()),
-      Product.name,
-    );
+    const errors = validateSyncData(new ProductValidation(this), Product.name);
 
     if (errors.length) {
       throw errors;
@@ -72,5 +54,20 @@ export class Product extends Entity {
       purchasePrice: this.purchasePrice,
       sellingPrice: this.sellingPrice,
     };
+  }
+
+  getPurchasePrice(): number {
+    return this.purchasePrice;
+  }
+
+  getSellingPrice(): number {
+    return this.sellingPrice;
+  }
+
+  getPercentOfDiscount(): number {
+    const sellingPrice = this.getSellingPrice();
+    const purchasePrice = this.getPurchasePrice();
+
+    return (sellingPrice * 100) / purchasePrice;
   }
 }
