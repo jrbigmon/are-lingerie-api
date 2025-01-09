@@ -8,7 +8,7 @@ export class BaseRepository<Model> {
     protected readonly model: Repository<Model>,
   ) {}
 
-  getSQLRepository(entityManager?: EntityManager): Repository<Model> {
+  protected getSQLRepository(entityManager?: EntityManager): Repository<Model> {
     if (entityManager) {
       return entityManager.getRepository(this.entityClass);
     }
