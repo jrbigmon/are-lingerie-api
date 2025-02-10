@@ -6,17 +6,20 @@ import { ProductOrderValidation } from './product-order.validation';
 export interface ProductOrderProps {
   id: string;
   product: Product;
+  orderId: string;
   quantity?: number;
 }
 
 export class ProductOrder extends Entity {
   private product: Product;
   private quantity: number;
+  private orderId: string;
 
-  constructor({ id, product, quantity = 1 }: ProductOrderProps) {
+  constructor({ id, product, orderId, quantity = 1 }: ProductOrderProps) {
     super(id);
     this.product = product;
     this.quantity = quantity;
+    this.orderId = orderId;
     this.isValid();
   }
 
@@ -25,6 +28,7 @@ export class ProductOrder extends Entity {
       id: this.id,
       product: this.product,
       quantity: this.quantity,
+      orderId: this.orderId,
     };
   }
 
@@ -47,6 +51,10 @@ export class ProductOrder extends Entity {
 
   getQuantity(): number {
     return this.quantity;
+  }
+
+  getOrderId(): string {
+    return this.orderId;
   }
 
   getTotal(): number {

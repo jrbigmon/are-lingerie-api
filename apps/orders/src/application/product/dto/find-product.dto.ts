@@ -6,4 +6,5 @@ export interface FindProductOutput {
   sellingPrice: number;
   purchasePrice: number;
   percentOfDiscount: number;
+  originalProductId: string;
 }

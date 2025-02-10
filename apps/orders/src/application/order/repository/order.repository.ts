@@ -4,6 +4,9 @@ import { OrderRepositoryInterface } from './order.repository.interface';
 import { OrderModel } from '../model/order.model';
 import { Order } from '../../../domain/order/entity/order';
 import { Inject } from '@nestjs/common';
+import { CustomerModel } from '../../customer/model/customer.model';
+import { ProductOrderModel } from '../../product-order/model/product-order.model';
+import { ProductModel } from '../../product/model/product.model';
 
 export class OrderRepository
   extends BaseRepository<OrderModel>
@@ -22,15 +25,8 @@ export class OrderRepository
   ): Promise<void> {
     const model = this.getSQLRepository(entityManager);
 
-    const {
-      id,
-      status,
-      customer,
-      deliveryDate,
-      billingAddress,
-      billingDate,
-      productOrders,
-    } = entity.toJSON();
+    const { id, status, customer, deliveryDate, billingAddress, billingDate } =
+      entity.toJSON();
 
     await model.save({
       id,

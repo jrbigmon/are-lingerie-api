@@ -17,4 +17,7 @@ export class ProductModel extends Model {
 
   @Column({ name: 'selling_price', nullable: false })
   sellingPrice: number;
+
+  @Column({ name: 'original_product_id', nullable: false })
+  originalProductId: string;
 }

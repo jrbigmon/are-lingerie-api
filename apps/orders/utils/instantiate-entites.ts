@@ -21,6 +21,7 @@ export const instantiateEntities = () => {
       barcode: product.barcode,
       purchasePrice: product.purchasePrice,
       sellingPrice: product.sellingPrice,
+      originalProductId: product.originalProductId,
     });
   };
 

@@ -36,8 +36,10 @@ describe('Order entity', () => {
             description: 'product 1 description',
             purchasePrice: 100,
             sellingPrice: 100,
+            originalProductId: '123',
           }),
           quantity: 2,
+          orderId: '123',
         }),
       ],
     };
@@ -76,6 +78,7 @@ describe('Order entity', () => {
             sellingPrice: 100,
           },
           quantity: 2,
+          orderId: '123',
         },
       ],
     });

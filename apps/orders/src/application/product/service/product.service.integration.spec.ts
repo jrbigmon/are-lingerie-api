@@ -34,6 +34,7 @@ describe('ProductService integration tests', () => {
           barcode: '12345678910',
           purchasePrice: 100,
           sellingPrice: 98,
+          originalProductId: '123',
         }),
       );
 
@@ -47,6 +48,7 @@ describe('ProductService integration tests', () => {
         sellingPrice: 98,
         purchasePrice: 100,
         percentOfDiscount: 2,
+        originalProductId: '123',
       });
     });
   });

@@ -5,15 +5,16 @@ import { ProductOrder } from '../entity/product-order';
 export interface CreateProductOrderInput {
   quantity: number;
   product: Product;
+  orderId: string;
 }
 
 export function productOrderFactory() {
   const create = (input: CreateProductOrderInput): ProductOrder => {
     const id = generateUUID();
 
-    const { quantity, product } = input;
+    const { quantity, product, orderId } = input;
 
-    const productOrder = new ProductOrder({ id, quantity, product });
+    const productOrder = new ProductOrder({ id, quantity, product, orderId });
 
     return productOrder;
   };

@@ -20,8 +20,14 @@ export class ProductService implements ProductServiceInterface {
 
     const product = await this.repository.get(id, entityManager);
 
-    const { name, description, barcode, sellingPrice, purchasePrice } =
-      product.toJSON();
+    const {
+      name,
+      description,
+      barcode,
+      sellingPrice,
+      purchasePrice,
+      originalProductId,
+    } = product.toJSON();
 
     return {
       id,
@@ -31,6 +37,7 @@ export class ProductService implements ProductServiceInterface {
       sellingPrice,
       purchasePrice,
       percentOfDiscount: product.getPercentOfDiscount(),
+      originalProductId,
     };
   }
 }

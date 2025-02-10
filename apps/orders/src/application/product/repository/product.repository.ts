@@ -26,8 +26,15 @@ export class ProductRepository
   ): Promise<void> {
     const model = this.getSQLRepository(entityManager);
 
-    const { id, name, description, barcode, purchasePrice, sellingPrice } =
-      entity.toJSON();
+    const {
+      id,
+      name,
+      description,
+      barcode,
+      purchasePrice,
+      sellingPrice,
+      originalProductId,
+    } = entity.toJSON();
 
     await model.save({
       id,
@@ -36,6 +43,7 @@ export class ProductRepository
       barcode,
       purchasePrice,
       sellingPrice,
+      originalProductId,
     });
   }
 

@@ -10,12 +10,14 @@ describe('ProductOrder', () => {
       description: 'Product description',
       purchasePrice: 100,
       sellingPrice: 100,
+      originalProductId: '123',
     });
 
     const productOrder = new ProductOrder({
       id: '111',
       product,
       quantity: 2,
+      orderId: '123',
     });
 
     expect(productOrder.toJSON()).toMatchObject({
@@ -44,12 +46,14 @@ describe('ProductOrder', () => {
         description: 'Product description',
         purchasePrice: 100,
         sellingPrice: 100,
+        originalProductId: '123',
       });
 
       new ProductOrder({
         id: '',
         product,
         quantity: 2,
+        orderId: '123',
       });
     } catch (error) {
       errors = error;
@@ -75,6 +79,7 @@ describe('ProductOrder', () => {
         id: '123',
         product: null,
         quantity: 2,
+        orderId: '123',
       });
     } catch (error) {
       errors = error;
@@ -103,12 +108,14 @@ describe('ProductOrder', () => {
         description: 'Product description',
         purchasePrice: 100,
         sellingPrice: 100,
+        originalProductId: '123',
       });
 
       new ProductOrder({
         id: '123',
         product,
         quantity: 0,
+        orderId: '123',
       });
     } catch (error) {
       errors = error;
@@ -121,6 +128,42 @@ describe('ProductOrder', () => {
           timestamp: expect.any(Date),
           property: 'quantity',
           value: 0,
+        },
+      ]);
+    }
+  });
+
+  it('should be not instantiate a product order when the order id is missing', () => {
+    let errors = [];
+
+    try {
+      const product = new Product({
+        id: '123',
+        barcode: '12333321321',
+        name: 'Product 1',
+        description: 'Product description',
+        purchasePrice: 100,
+        sellingPrice: 100,
+        originalProductId: '123',
+      });
+
+      new ProductOrder({
+        id: '123',
+        product,
+        quantity: 1,
+        orderId: null,
+      });
+    } catch (error) {
+      errors = error;
+    } finally {
+      expect(errors).toBeDefined();
+      expect(errors).toMatchObject([
+        {
+          className: 'ProductOrder',
+          message: ['Product order id is required'],
+          timestamp: expect.any(Date),
+          property: 'orderId',
+          value: null,
         },
       ]);
     }

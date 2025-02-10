@@ -7,13 +7,21 @@ export interface CreateProductInput {
   barcode: string;
   purchasePrice: number;
   sellingPrice: number;
+  originalProductId: string;
 }
 
 export function productFactory() {
   const create = (input: CreateProductInput): Product => {
     const id = generateUUID();
 
-    const { name, description, barcode, purchasePrice, sellingPrice } = input;
+    const {
+      name,
+      description,
+      barcode,
+      purchasePrice,
+      sellingPrice,
+      originalProductId,
+    } = input;
 
     const product = new Product({
       id,
@@ -22,6 +30,7 @@ export function productFactory() {
       barcode,
       purchasePrice,
       sellingPrice,
+      originalProductId,
     });
 
     return product;

@@ -9,6 +9,7 @@ export interface ProductProps {
   barcode: string;
   purchasePrice: number;
   sellingPrice: number;
+  originalProductId: string;
 }
 
 export class Product extends Entity {
@@ -17,6 +18,7 @@ export class Product extends Entity {
   private barcode: string;
   private purchasePrice: number;
   private sellingPrice: number;
+  private originalProductId: string;
 
   constructor({
     id,
@@ -25,6 +27,7 @@ export class Product extends Entity {
     barcode,
     purchasePrice,
     sellingPrice,
+    originalProductId,
   }: ProductProps) {
     super(id);
     this.name = name;
@@ -32,6 +35,7 @@ export class Product extends Entity {
     this.barcode = barcode;
     this.purchasePrice = purchasePrice;
     this.sellingPrice = sellingPrice;
+    this.originalProductId = originalProductId;
     this.isValid();
   }
 
@@ -53,6 +57,7 @@ export class Product extends Entity {
       barcode: this.barcode,
       purchasePrice: this.purchasePrice,
       sellingPrice: this.sellingPrice,
+      originalProductId: this.originalProductId,
     };
   }
 

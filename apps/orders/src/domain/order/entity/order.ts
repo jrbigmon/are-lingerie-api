@@ -20,7 +20,7 @@ export interface OrderProps {
   deliveryDate: Date;
   status: OrderStatus;
   billingAddress: Address;
-  productOrders: ProductOrder[];
+  productOrders?: ProductOrder[];
 }
 
 export class Order extends Entity {
@@ -78,47 +78,23 @@ export class Order extends Entity {
     return this.customer;
   }
 
-  public setCustomer(customer: Customer): void {
-    this.customer = customer;
-  }
-
   public getBillingDate(): Date {
     return this.billingDate;
-  }
-
-  public setBillingDate(billingDate: Date): void {
-    this.billingDate = billingDate;
   }
 
   public getDeliveryDate(): Date {
     return this.deliveryDate;
   }
 
-  public setDeliveryDate(deliveryDate: Date): void {
-    this.deliveryDate = deliveryDate;
-  }
-
   public getStatus(): OrderStatus {
     return this.status;
-  }
-
-  public setStatus(status: OrderStatus): void {
-    this.status = status;
   }
 
   public getBillingAddress(): Address {
     return this.billingAddress;
   }
 
-  public setBillingAddress(billingAddress: Address): void {
-    this.billingAddress = billingAddress;
-  }
-
   public getProductOrders(): ProductOrder[] {
     return this.productOrders;
-  }
-
-  public setProductOrders(productOrders: ProductOrder[]): void {
-    this.productOrders = productOrders;
   }
 }

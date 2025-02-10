@@ -14,7 +14,9 @@ describe('productOrderFactory', () => {
         description: 'Product description',
         purchasePrice: 100,
         sellingPrice: 100,
+        originalProductId: '123',
       }),
+      orderId: '123',
     };
 
     const productOrder = create(input);
@@ -30,6 +32,7 @@ describe('productOrderFactory', () => {
         purchasePrice: 100,
         sellingPrice: 100,
       },
+      orderId: '123',
     });
   });
 });

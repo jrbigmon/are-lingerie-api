@@ -10,6 +10,7 @@ describe('Product entity', () => {
       description: 'Product description',
       purchasePrice: 100,
       sellingPrice: 100,
+      originalProductId: '123',
     });
 
     expect(product.toJSON()).toMatchObject({
@@ -19,6 +20,7 @@ describe('Product entity', () => {
       description: 'Product description',
       purchasePrice: 100,
       sellingPrice: 100,
+      originalProductId: '123',
     });
   });
 
@@ -33,6 +35,7 @@ describe('Product entity', () => {
         description: 'Product description',
         purchasePrice: 100,
         sellingPrice: 100,
+        originalProductId: '123',
       });
     } catch (error) {
       errors = error;
@@ -54,6 +57,7 @@ describe('Product entity', () => {
       description: 'Product description',
       purchasePrice: 100,
       sellingPrice: 98,
+      originalProductId: '123',
     });
 
     expect(product.getPercentOfDiscount()).toBe(2);
